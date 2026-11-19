@@ -261,7 +261,7 @@ ul.plain{margin:6px 0;padding-left:20px}
           <label class="opt" for="optLadder"><input type="checkbox" id="optLadder"> Tempo ladder (start slower, +5 BPM per passed loop)</label>
           <label class="opt" for="optExact"><input type="checkbox" id="optExact"> Exact octave (off = any octave counts)</label>
           <label class="opt" for="optDrums"><input type="checkbox" id="optDrums"> Drums in the app loop</label>
-          <label class="opt" for="optMidiSnd"><input type="checkbox" id="optMidiSnd"> App sound for KeyStep notes (off when the Circuit makes the sound)</label>
+          <label class="opt" for="optMidiSnd"><input type="checkbox" id="optMidiSnd"> App sound for KeyStep notes (turn off when the Circuit makes the sound)</label>
           <label class="opt" for="optTapSnd"><input type="checkbox" id="optTapSnd"> App sound for screen taps</label>
         </div>
       </div>
@@ -382,7 +382,7 @@ const EAR={q:'Major or minor triad? Listen to the middle note.',i:'Name the inte
 
 /* state */
 const today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
-let S={v:1,at:0,day:1,set:{lat:0,exact:false,drums:true,midiSnd:false,tapSnd:true},p:{},log:{},best:{}};
+let S={v:1,at:0,day:1,set:{lat:0,exact:false,drums:true,midiSnd:true,tapSnd:true},p:{},log:{},best:{}};
 const P=d=>S.p[d]||(S.p[d]={a:false,b:false,steps:[],quiz:{},ear:[0,0]});
 try{const j=JSON.parse(localStorage.getItem('ks-lessons-v1')||'null');if(j&&j.v===1)S=Object.assign(S,j)}catch(e){}
 let db=null,docRef=null,saveT=0,writing=false,pending=false;
@@ -455,7 +455,8 @@ const noteOn=(n,t,src)=>{if((src==='tap'&&S.set.tapSnd)||(src==='midi'&&S.set.mi
 let midi=null;
 const fillSel=()=>{if(!midi)return;const ins=[...midi.inputs.values()];const opt=(sel,pref)=>{const cur=$(sel).value;$(sel).innerHTML='<option value="">None</option>'+ins.map(i=>`<option value="${i.id}">${i.name.replace(/</g,'')}</option>`).join('');const p=ins.find(i=>i.id===cur)||ins.find(i=>pref.test(i.name));$(sel).value=p?p.id:''};opt('selNotes',/keystep/i);opt('selClock',/circuit/i);if(!$('selNotes').value&&ins[0]&&!/circuit/i.test(ins[0].name))$('selNotes').value=ins[0].id;bind();$('midiState').textContent=ins.length?'Connected: '+ins.map(i=>i.name).join(', ')+'.':'MIDI allowed, but no device found. Check the USB cable.'};
 const bind=()=>{for(const i of midi.inputs.values())i.onmidimessage=e=>{const [b,n,v]=e.data,isN=i.id===$('selNotes').value,isC=i.id===$('selClock').value;if(b>=0xF8||b===0xFA||b===0xFC){if(isC)onClock(b,e.timeStamp);return}if(!isN)return;if((b&0xF0)===0x90&&v>0)noteOn(n,e.timeStamp,'midi')}};
-$('midiGo').onclick=async()=>{if(!navigator.requestMIDIAccess){$('midiState').textContent='This browser has no Web MIDI. Use Chrome on the MacBook or the Pixel.';return}try{midi=await navigator.requestMIDIAccess({sysex:false});midi.onstatechange=fillSel;fillSel()}catch(e){$('midiState').textContent='MIDI was blocked. Tap the icon left of the web address, open Permissions or Site settings, set MIDI to Allow, then reload.'}};
+document.addEventListener('pointerdown',()=>{try{A()}catch(e){}},{once:true,capture:true});
+$('midiGo').onclick=async()=>{try{A()}catch(e){}if(!navigator.requestMIDIAccess){$('midiState').textContent='This browser has no Web MIDI. Use Chrome on the MacBook or the Pixel.';return}try{midi=await navigator.requestMIDIAccess({sysex:false});midi.onstatechange=fillSel;fillSel()}catch(e){$('midiState').textContent='MIDI was blocked. Tap the icon left of the web address, open Permissions or Site settings, set MIDI to Allow, then reload.'}};
 $('selNotes').onchange=$('selClock').onchange=()=>midi&&bind();
 
 /* calibration */
