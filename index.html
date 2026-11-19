@@ -134,6 +134,9 @@ textarea{width:100%;font:13px/1.4 ui-monospace,Menlo,monospace;min-height:70px;b
 .hide{display:none!important}
 .sync{font-size:13px;color:var(--mute)}
 ul.plain{margin:6px 0;padding-left:20px}
+.chip{display:block;margin-top:8px;width:100%;min-height:40px;border:1px solid rgba(255,255,255,.55);background:rgba(0,0,0,.18);color:#fff;font:700 13px "Albert Sans",system-ui;cursor:pointer;text-align:left;padding:0 12px}
+.chip.on{border-color:var(--yel);color:var(--yel)}
+.bg{border-left:3px solid var(--pur3);padding-left:10px}
 .tag{margin-top:24px;padding-top:8px;border-top:1px solid var(--hair);font-size:13px;color:var(--mute);text-align:right}
 @media(max-width:600px){.tier{padding:16px 14px 14px}.lower{padding:16px 10px 0}.kb{height:120px;border-left-width:10px;border-right-width:10px}.wrap{padding-top:10px}.st{height:24px;font-size:10px}.steps{gap:2px}.tabs{width:100%}.tab{flex:1;justify-content:center;padding:0 8px}}
 @media(prefers-reduced-motion:reduce){.meter span{transition:none}}
@@ -168,7 +171,7 @@ ul.plain{margin:6px 0;padding-left:20px}
       <div class="tier" id="tier" style="position:relative"><i class="screw s1"></i><i class="screw s2"></i>
       <div class="devhead">
         <div><div class="code" id="drCode">KYS001</div><h2 id="drName">Drill</h2><div class="spec" id="drMeta"></div></div>
-        <div><div class="brk">Display</div><div class="oled" id="oled">READY</div></div>
+        <div><div class="brk">Display</div><div class="oled" id="oled">READY</div><button class="chip" id="midiChip">Connect KeyStep</button></div>
       </div>
       <div class="mod"><div class="brk">Step sequencer</div>
       <div class="steps" id="steps"></div>
@@ -203,6 +206,7 @@ ul.plain{margin:6px 0;padding-left:20px}
         <div class="card">
           <div class="tline"><h3><svg class="ic" viewBox="0 0 18 18" aria-hidden="true"><path d="M3 9h2M7 5v8M11 2v14M15 6v6" stroke="currentColor" stroke-width="2.5"/></svg>Ear training, 5 min</h3><span class="timer" id="tmEar">5:00</span></div>
           <p id="earHow"></p>
+          <p class="note bg" id="earInfo"></p>
           <div class="row"><button class="btn" id="earPlay">Play question</button><button class="btn ghost" id="earAgain">Again</button></div>
           <div class="row" id="earAns" style="margin-top:10px"></div>
           <p id="earMsg" class="note"></p>
@@ -258,6 +262,8 @@ ul.plain{margin:6px 0;padding-left:20px}
         </div>
         <div class="card">
           <h3>Options</h3>
+          <label class="opt" for="optAuto"><input type="checkbox" id="optAuto"> Auto-switch for the Circuit (app sound and drums off when a Circuit is plugged in)</label>
+          <label class="opt" for="optWake"><input type="checkbox" id="optWake"> Keep the screen on while Keys is open</label>
           <label class="opt" for="optLadder"><input type="checkbox" id="optLadder"> Tempo ladder (start slower, +5 BPM per passed loop)</label>
           <label class="opt" for="optExact"><input type="checkbox" id="optExact"> Exact octave (off = any octave counts)</label>
           <label class="opt" for="optDrums"><input type="checkbox" id="optDrums"> Drums in the app loop</label>
@@ -326,6 +332,23 @@ const D=[
  {t:'Two keys: Am F then Cm Ab',bars:4,bpm:90,ev:chords([Am,Fv,Cm,Abv],[0,8],[[1,3,5],[1,2,5],[1,3,5],[1,2,5]]),how:'Bars 1-2 in A minor, bars 3-4 the same move three semitones up in C minor. Feel the shape stay the same.',ear:'m'},
  {t:'Test: C minor scale at 100',bars:2,bpm:100,ev:seq(upDown(CM),2,SF),how:'Eighths at 100 BPM. Then try the A minor scale at the same speed by changing nothing but where your thumb starts.',ear:'m'}
 ];
+const BG=['The keyboard repeats the same 12-note pattern in every octave, which is why one hand shape works anywhere. All Western music is built from these 12 notes.',
+ 'Scales are the note sets songs are made from. Major and minor are the two most common; minor gives the darker mood heard across most of your reference genres.',
+ 'Chords are notes played together. The three-note triad has been the basic chord of Western harmony for centuries, and most pop and dance progressions start from triads.',
+ 'Every key has seven chords made only from its own notes. Roman numerals let musicians describe a progression without naming the key, so one idea works in any key.',
+ 'A progression is a sequence of chords that repeats. Dance tracks often loop one progression for the whole track and build interest through rhythm, sound and arrangement.',
+ 'When chords change, each note can be treated as its own voice moving to the next chord. Keyboard players choose close shapes so the harmony moves smoothly.',
+ 'Rhythm is when notes happen. Drum machines like the Circuit divide time into a grid of steps, which is why dance music sits so tightly in time.',
+ 'Each key has a signature: the sharps or flats it always uses. C minor\'s three flats are the black keys you will keep returning to.',
+ 'Keys are related to each other. Knowing related keys lets you change mood, for example minor to its relative major, without leaving the same notes.',
+ 'Classical minor-key music often raises the 7th so the v chord pulls harder back home. Electronic music often prefers the softer pull of natural minor.',
+ 'Musicians think in shapes and numbers so they can move an idea to any key, for example to fit a vocal or a sample.',
+ 'Syncopation means accents off the beat. It sits at the heart of funk, house and garage, and makes a groove feel like it is pushing forward.',
+ 'Intervals are the distances between notes. Every chord, scale and melody is a pattern of intervals.',
+ 'Consolidating before adding 7th chords makes the next step much easier.'];
+const EARINFO={q:'A triad has three notes: root, third and fifth. In a major triad the third is 4 semitones above the root; in a minor triad it is 3. That one-semitone difference is why major sounds bright and settled and minor darker. The root and fifth are the same in both, so listen to the middle note.',
+ i:'An interval is the distance between two notes, counted in semitones. Minor 3rd (3) and major 3rd (4) build chords; the perfect 5th (7) sounds open and stable and anchors many basslines; the octave (12) is the same note higher. Hearing them lets you work out riffs by ear.',
+ d:'Scale degrees number the notes of a key from the home note (1) to 7. Against the home chord each has a role: 1 feels at rest, 5 is stable, 3 sets the mood, and 2, 4, 6 and 7 want to move. This is how you work out a hook or bassline in your track\'s key.'};
 const KEY=d=>d<=7?'A minor':(d===13?'A minor, C minor':'C minor');
 const GOAL=['2','1, 2','2','1','1','1','1','1','2','1','1','1','1','1, 2'];
 const code=d=>'KYS'+String(d).padStart(3,'0');
@@ -385,10 +408,14 @@ const today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth
 let S={v:1,at:0,day:1,set:{lat:0,exact:false,drums:true,midiSnd:true,tapSnd:true},p:{},log:{},best:{}};
 const P=d=>S.p[d]||(S.p[d]={a:false,b:false,steps:[],quiz:{},ear:[0,0]});
 try{const j=JSON.parse(localStorage.getItem('ks-lessons-v1')||'null');if(j&&j.v===1)S=Object.assign(S,j)}catch(e){}
+const DEVK=['lat','drums','midiSnd','tapSnd'];let DEV={};try{DEV=JSON.parse(localStorage.getItem('keys-device')||'null')||{}}catch(e){}
+DEVK.forEach(k=>{if(!(k in DEV))DEV[k]=S.set[k]});if(!('auto' in DEV))DEV.auto=true;if(!('wake' in DEV))DEV.wake=true;
+const saveDev=()=>{try{localStorage.setItem('keys-device',JSON.stringify(DEV))}catch(e){}};
+const applyDev=()=>{S.set=Object.assign({},S.set);DEVK.forEach(k=>{S.set[k]=DEV[k]})};applyDev();
 let db=null,docRef=null,saveT=0,writing=false,pending=false;
 const save=()=>{S.at=Date.now();try{localStorage.setItem('ks-lessons-v1',JSON.stringify(S))}catch(e){}clearTimeout(saveT);saveT=setTimeout(push,1500)};
 const push=async()=>{if(!docRef)return;if(writing){pending=true;return}writing=true;try{await docRef.set(JSON.parse(JSON.stringify(S)));$('syncMsg').textContent='Synced to your account, '+new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})+'.'}catch(e){$('syncMsg').textContent='Could not sync just now; saved on this device.'}writing=false;if(pending){pending=false;push()}};
-const attach=async(ref,label)=>{docRef=ref;const t=setTimeout(()=>{$('syncMsg').textContent='Sync not reachable yet; saving on this device.'},10000);try{const snap=await docRef.get();clearTimeout(t);const r=snap.exists?snap.data():null;if(r&&r.v===1&&(r.at||0)>(S.at||0)){S=Object.assign(S,JSON.parse(JSON.stringify(r)));try{localStorage.setItem('ks-lessons-v1',JSON.stringify(S))}catch(e){}renderAll()}$('syncMsg').textContent=label;if(!r||(S.at||0)>(r.at||0))push()}catch(e){clearTimeout(t);docRef=null;$('syncMsg').textContent='Could not reach sync; saving on this device.'}};
+const attach=async(ref,label)=>{docRef=ref;const t=setTimeout(()=>{$('syncMsg').textContent='Sync not reachable yet; saving on this device.'},10000);try{const snap=await docRef.get();clearTimeout(t);const r=snap.exists?snap.data():null;if(r&&r.v===1&&(r.at||0)>(S.at||0)){S=Object.assign(S,JSON.parse(JSON.stringify(r)));applyDev();try{localStorage.setItem('ks-lessons-v1',JSON.stringify(S))}catch(e){}renderAll()}$('syncMsg').textContent=label;if(!r||(S.at||0)>(r.at||0))push()}catch(e){clearTimeout(t);docRef=null;$('syncMsg').textContent='Could not reach sync; saving on this device.'}};
 (async()=>{try{if(!window.claude||!claude.use)return;const [d,u]=await Promise.all([claude.use('db'),claude.use('user')]);if(!d||!u)return;const id=await u.id();if(!id)return;attach(d.doc('data/users/'+id+'/progress'),'Progress syncs between your phone and laptop.')}catch(e){}})();
 (()=>{const cfg=window.KEYS_FB;if(!cfg||!cfg.apiKey||typeof firebase==='undefined'){$('syncMsg').textContent='Saving on this device. Account sync is not set up yet.';return}try{firebase.initializeApp(cfg);const auth=firebase.auth(),fs=firebase.firestore();$('authIn').onclick=async()=>{try{await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())}catch(e){try{await auth.signInWithRedirect(new firebase.auth.GoogleAuthProvider())}catch(e2){$('syncMsg').textContent='Sign-in did not work: '+(e2.code||e.code||'error')}}};$('authOut').onclick=()=>auth.signOut();auth.onAuthStateChanged(u=>{$('authIn').classList.toggle('hide',!!u);$('authOut').classList.toggle('hide',!u);$('authWho').textContent=u?'Signed in as '+(u.email||'you'):'';if(u)attach(fs.collection('users').doc(u.uid),'Progress syncs to your Google account on every device.');else{docRef=null;$('syncMsg').textContent='Saving on this device. Sign in to sync.'}})}catch(e){$('syncMsg').textContent='Saving on this device only.'}})();
 
@@ -456,17 +483,27 @@ let midi=null;
 const fillSel=()=>{if(!midi)return;const ins=[...midi.inputs.values()];const opt=(sel,pref)=>{const cur=$(sel).value;$(sel).innerHTML='<option value="">None</option>'+ins.map(i=>`<option value="${i.id}">${i.name.replace(/</g,'')}</option>`).join('');const p=ins.find(i=>i.id===cur)||ins.find(i=>pref.test(i.name));$(sel).value=p?p.id:''};opt('selNotes',/keystep/i);opt('selClock',/circuit/i);if(!$('selNotes').value&&ins[0]&&!/circuit/i.test(ins[0].name))$('selNotes').value=ins[0].id;bind();$('midiState').textContent=ins.length?'Connected: '+ins.map(i=>i.name).join(', ')+'.':'MIDI allowed, but no device found. Check the USB cable.'};
 const bind=()=>{for(const i of midi.inputs.values())i.onmidimessage=e=>{const [b,n,v]=e.data,isN=i.id===$('selNotes').value,isC=i.id===$('selClock').value;if(b>=0xF8||b===0xFA||b===0xFC){if(isC)onClock(b,e.timeStamp);return}if(!isN)return;if((b&0xF0)===0x90&&v>0)noteOn(n,e.timeStamp,'midi')}};
 document.addEventListener('pointerdown',()=>{try{A()}catch(e){}},{once:true,capture:true});
-$('midiGo').onclick=async()=>{try{A()}catch(e){}if(!navigator.requestMIDIAccess){$('midiState').textContent='This browser has no Web MIDI. Use Chrome on the MacBook or the Pixel.';return}try{midi=await navigator.requestMIDIAccess({sysex:false});midi.onstatechange=fillSel;fillSel()}catch(e){$('midiState').textContent='MIDI was blocked. Tap the icon left of the web address, open Permissions or Site settings, set MIDI to Allow, then reload.'}};
+let curMode='';
+const chip=()=>{const c=$('midiChip');if(!midi){c.textContent='Connect KeyStep';c.classList.remove('on');return}const ins=[...midi.inputs.values()],ks=ins.find(i=>/keystep/i.test(i.name))||ins.find(i=>i.id===$('selNotes').value),circ=ins.some(i=>/circuit/i.test(i.name));c.textContent=ks?(ks.name.replace(/</g,'')+' connected, '+(circ?'Circuit mode':'Keys only')):'No keyboard found: check the cable';c.classList.toggle('on',!!ks)};
+const autoMode=()=>{if(!midi)return;const circ=[...midi.inputs.values()].some(i=>/circuit/i.test(i.name)),m=circ?'circuit':'solo';if(DEV.auto!==false&&m!==curMode){if(curMode||circ){S.set.midiSnd=DEV.midiSnd=!circ;S.set.drums=DEV.drums=!circ;saveDev();renderSet()}curMode=m}chip()};
+const connectMidi=async()=>{if(midi){fillSel();autoMode();return}if(!navigator.requestMIDIAccess){$('midiState').textContent='This browser has no Web MIDI. Use Chrome on the MacBook or the Pixel.';return}try{midi=await navigator.requestMIDIAccess({sysex:false});midi.onstatechange=()=>{fillSel();autoMode()};fillSel();autoMode()}catch(e){chip();$('midiState').textContent='MIDI was blocked. Tap the icon left of the web address, open Permissions or Site settings, set MIDI to Allow, then reload.'}};
+$('midiGo').onclick=()=>{try{A()}catch(e){}connectMidi()};
+$('midiChip').onclick=()=>{try{A()}catch(e){}connectMidi()};
+try{navigator.permissions.query({name:'midi',sysex:false}).then(p=>{if(p.state==='granted')connectMidi();p.onchange=()=>{if(p.state==='granted')connectMidi()}}).catch(()=>{})}catch(e){}
+let wl=null;const wake=async()=>{if(DEV.wake===false||wl||!('wakeLock' in navigator)||document.visibilityState!=='visible')return;try{wl=await navigator.wakeLock.request('screen');wl.addEventListener('release',()=>{wl=null})}catch(e){}};
+document.addEventListener('pointerdown',wake,{capture:true});document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){wake();if(midi){fillSel();autoMode()}}});wake();
+$('optAuto').onchange=()=>{DEV.auto=$('optAuto').checked;saveDev();curMode='';autoMode()};
+$('optWake').onchange=()=>{DEV.wake=$('optWake').checked;saveDev();if(!DEV.wake&&wl){wl.release();wl=null}else wake()};
 $('selNotes').onchange=$('selClock').onchange=()=>midi&&bind();
 
 /* calibration */
-$('calGo').onclick=()=>{const c=A(),sp=60/90,t0=c.currentTime+.3;cal={taps:[],exp:[]};for(let i=0;i<12;i++){click(t0+i*sp,i%4===0);cal.exp.push(perfAt(t0+i*sp)+outLat())}$('calMsg').textContent='Tap along...';setTimeout(()=>{const ds=[];cal.exp.slice(3).forEach(x=>{let b=null;cal.taps.forEach(t=>{if(Math.abs(t-x)<250&&(b===null||Math.abs(t-x)<Math.abs(b)))b=t-x});if(b!==null)ds.push(b)});cal=null;if(ds.length<5){$('calMsg').textContent='Not enough taps. Try again.';return}ds.sort((a,b)=>a-b);const m=Math.round(ds[Math.floor(ds.length/2)]);S.set.lat=Math.round(m/5)*5;$('lat').value=S.set.lat;save();$('calMsg').textContent='Set to '+S.set.lat+' ms.'},12*sp*1000+900)};
+$('calGo').onclick=()=>{const c=A(),sp=60/90,t0=c.currentTime+.3;cal={taps:[],exp:[]};for(let i=0;i<12;i++){click(t0+i*sp,i%4===0);cal.exp.push(perfAt(t0+i*sp)+outLat())}$('calMsg').textContent='Tap along...';setTimeout(()=>{const ds=[];cal.exp.slice(3).forEach(x=>{let b=null;cal.taps.forEach(t=>{if(Math.abs(t-x)<250&&(b===null||Math.abs(t-x)<Math.abs(b)))b=t-x});if(b!==null)ds.push(b)});cal=null;if(ds.length<5){$('calMsg').textContent='Not enough taps. Try again.';return}ds.sort((a,b)=>a-b);const m=Math.round(ds[Math.floor(ds.length/2)]);S.set.lat=DEV.lat=Math.round(m/5)*5;saveDev();$('lat').value=S.set.lat;save();$('calMsg').textContent='Set to '+S.set.lat+' ms.'},12*sp*1000+900)};
 
 /* ear training */
 const EARQ={q:()=>{const r=55+Math.floor(Math.random()*10),maj=Math.random()<.5;return{mode:'q',notes:[[r,r+(maj?4:3),r+7]],ans:maj?'Major':'Minor',opts:['Major','Minor']}},
  i:()=>{const r=55+Math.floor(Math.random()*10),ivs=[['Minor 3rd',3],['Major 3rd',4],['Perfect 5th',7],['Octave',12]],p=ivs[Math.floor(Math.random()*ivs.length)];return{mode:'i',notes:[[r],[r+p[1]]],ans:p[0],opts:ivs.map(x=>x[0])}},
  d:()=>{const cm=S.day>=10,root=cm?60:57,sc=[0,2,3,5,7,8,10],k=Math.floor(Math.random()*7);return{mode:'d',root,notes:[[root,root+3,root+7],[root+sc[k]]],ans:String(k+1),opts:['1','2','3','4','5','6','7'],deg:sc,key:cm?'C minor':'A minor'}}};
-const newEar=()=>{let m=drill().ear;if(m==='m')m=['q','i','d'][Math.floor(Math.random()*3)];ear=EARQ[m]();ear.answered=false;$('earAns').innerHTML=ear.opts.map(o=>`<button class="ans" data-a="${o}">${o}</button>`).join('');$('earMsg').textContent=ear.mode==='d'?'Key: '+ear.key+'.':''};
+const newEar=()=>{let m=drill().ear;if(m==='m')m=['q','i','d'][Math.floor(Math.random()*3)];ear=EARQ[m]();ear.answered=false;if(drill().ear==='m')$('earInfo').textContent=EARINFO[m];$('earAns').innerHTML=ear.opts.map(o=>`<button class="ans" data-a="${o}">${o}</button>`).join('');$('earMsg').textContent=ear.mode==='d'?'Key: '+ear.key+'.':''};
 const playEar=()=>{if(!ear)return;const c=A(),t=c.currentTime+.1;ear.notes.forEach((g,i)=>g.forEach(n=>tone(n,t+i*.9,.8,.2)))};
 const answerEar=(a,byKey)=>{if(!ear||ear.answered)return;let ok;if(byKey){const k=ear.deg.indexOf(a);ok=k>=0&&String(k+1)===ear.ans;if(k<0){$('earMsg').textContent='That note is outside '+ear.key+'. Try again.';return}a=String(k+1)}else ok=a===ear.ans;ear.answered=true;const pr=P(S.day);pr.ear[1]++;if(ok)pr.ear[0]++;save();$('earSc').textContent=pr.ear[0]+'/'+pr.ear[1];document.querySelectorAll('#earAns .ans').forEach(b=>{if(b.dataset.a===ear.ans)b.classList.add('right');else if(b.dataset.a===a)b.classList.add('wrong')});$('earMsg').textContent=ok?'Right. Next question loading.':'It was '+ear.ans+'. Listen again, then next.';setTimeout(()=>{newEar();playEar()},ok?1100:2200)};
 $('earAns').onclick=e=>{const b=e.target.closest('.ans');if(b)answerEar(b.dataset.a,false)};
@@ -480,9 +517,9 @@ const timers={drill:mkTimer('tmDrill',600),ear:mkTimer('tmEar',300),th:mkTimer('
 /* render */
 const streak=()=>{let n=0;const d=new Date();if(!S.log[today()])d.setDate(d.getDate()-1);for(;;){const k=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');if(S.log[k]){n++;d.setDate(d.getDate()-1)}else break}return n};
 const renderDays=()=>{$('days').innerHTML=D.map((d,i)=>{const p=S.p[i+1]||{};return`<button class="day" data-d="${i+1}" aria-current="${S.day===i+1}" aria-label="Day ${i+1}">${code(i+1)}<i class="a${p.a?' on':''}"></i><i class="b${p.b?' on':''}"></i></button>`}).join('');const a=Object.values(S.p).filter(p=>p.a).length,b=Object.values(S.p).filter(p=>p.b).length;$('stA').textContent=a+'/14';$('stB').textContent=b+'/14';$('stStreak').textContent=streak()};
-const renderA=()=>{const d=drill(),p=P(S.day),it=INTRO[S.day-1];$('intro').innerHTML=`<div><b>Today</b>${it[0]}</div><div><b>Why it matters</b>${it[1]}</div>`+(it[2]?`<div><b>Listen for</b>${it[2]}</div>`:'');$('dayTitle').innerHTML='<b>'+code(S.day)+'</b> &nbsp;Weeks 1-2, day '+S.day+' of 14';$('drCode').textContent=code(S.day);$('drName').textContent=d.t;$('drMeta').innerHTML=[['Key',KEY(S.day)],['Target',d.bpm+' BPM'],['Bars',d.bars],['Hand','Right'],['Type',d.ev[0][1].length>1?'Chords':'Single notes'],['Goal',GOAL[S.day-1]]].map(x=>'<span>'+x[0]+' <b>'+x[1]+'</b></span>').join('');$('drHow').textContent=d.how+' New shape? Start in Wait mode, then the loop.';$('bpm').value=ladOn()?ladBpm():d.bpm;ladShow();$('earHow').textContent=EAR[d.ear];$('earSc').textContent=p.ear[0]+'/'+p.ear[1];const key=today()+':'+S.day;$('scBest').textContent=S.best[key]?S.best[key]+'%':'-';$('scLast').textContent='-';$('scOff').textContent='-';$('scWrong').textContent='0';$('scBar').style.width='0';$('doneAMsg').classList.toggle('hide',!p.a);$('doneA').textContent=p.a?'Part A done':'Mark Part A done';renderSteps(0);showTarget(d.ev[0],null);setTimeout(()=>scrollToNotes(d.ev[0][1]),50);ear=null;$('earAns').innerHTML='';$('earMsg').textContent='';timers.drill.reset();timers.ear.reset()};
-const renderB=()=>{const th=THEORY[S.day-1],ft=FEAT[S.day-1],p=P(S.day);$('thTitle').textContent='Theory: '+th[0];$('thBody').innerHTML=th[1];$('thQuiz').innerHTML=th[2].map((q,qi)=>`<p style="margin-top:14px"><b>${q[0]}</b></p><div class="row" data-q="${qi}">${q[1].map((o,oi)=>`<button class="ans${p.quiz[qi]!==undefined?(oi===q[2]?' right':(oi===p.quiz[qi]?' wrong':'')):''}" data-o="${oi}">${o}</button>`).join('')}</div>`).join('');$('ftTitle').textContent='Feature: '+ft[0];$('ftSteps').innerHTML=ft[1].map((s,i)=>`<li><input type="checkbox" id="fs${i}" data-i="${i}"${p.steps[i]?' checked':''}><label for="fs${i}">${s}</label></li>`).join('');$('doneBMsg').classList.toggle('hide',!p.b);$('doneB').textContent=p.b?'Part B done':'Mark Part B done';timers.th.reset();timers.ft.reset()};
-const renderSet=()=>{$('lat').value=S.set.lat;$('optLadder').checked=ladOn();$('optExact').checked=S.set.exact;$('optDrums').checked=S.set.drums;$('optMidiSnd').checked=S.set.midiSnd;$('optTapSnd').checked=S.set.tapSnd};
+const renderA=()=>{const d=drill(),p=P(S.day),it=INTRO[S.day-1];$('intro').innerHTML=`<div><b>Today</b>${it[0]}</div><div><b>Why it matters</b>${it[1]}</div>`+(it[2]?`<div><b>Listen for</b>${it[2]}</div>`:'');$('dayTitle').innerHTML='<b>'+code(S.day)+'</b> &nbsp;Weeks 1-2, day '+S.day+' of 14';$('drCode').textContent=code(S.day);$('drName').textContent=d.t;$('drMeta').innerHTML=[['Key',KEY(S.day)],['Target',d.bpm+' BPM'],['Bars',d.bars],['Hand','Right'],['Type',d.ev[0][1].length>1?'Chords':'Single notes'],['Goal',GOAL[S.day-1]]].map(x=>'<span>'+x[0]+' <b>'+x[1]+'</b></span>').join('');$('drHow').textContent=d.how+' New shape? Start in Wait mode, then the loop.';$('bpm').value=ladOn()?ladBpm():d.bpm;ladShow();$('earHow').textContent=EAR[d.ear];$('earInfo').textContent=d.ear==='m'?'Mixed day: the note under each question explains what it tests.':EARINFO[d.ear];$('earSc').textContent=p.ear[0]+'/'+p.ear[1];const key=today()+':'+S.day;$('scBest').textContent=S.best[key]?S.best[key]+'%':'-';$('scLast').textContent='-';$('scOff').textContent='-';$('scWrong').textContent='0';$('scBar').style.width='0';$('doneAMsg').classList.toggle('hide',!p.a);$('doneA').textContent=p.a?'Part A done':'Mark Part A done';renderSteps(0);showTarget(d.ev[0],null);setTimeout(()=>scrollToNotes(d.ev[0][1]),50);ear=null;$('earAns').innerHTML='';$('earMsg').textContent='';timers.drill.reset();timers.ear.reset()};
+const renderB=()=>{const th=THEORY[S.day-1],ft=FEAT[S.day-1],p=P(S.day);$('thTitle').textContent='Theory: '+th[0];$('thBody').innerHTML='<p class="bg"><b>Background.</b> '+BG[S.day-1]+'</p>'+th[1];$('thQuiz').innerHTML=th[2].map((q,qi)=>`<p style="margin-top:14px"><b>${q[0]}</b></p><div class="row" data-q="${qi}">${q[1].map((o,oi)=>`<button class="ans${p.quiz[qi]!==undefined?(oi===q[2]?' right':(oi===p.quiz[qi]?' wrong':'')):''}" data-o="${oi}">${o}</button>`).join('')}</div>`).join('');$('ftTitle').textContent='Feature: '+ft[0];$('ftSteps').innerHTML=ft[1].map((s,i)=>`<li><input type="checkbox" id="fs${i}" data-i="${i}"${p.steps[i]?' checked':''}><label for="fs${i}">${s}</label></li>`).join('');$('doneBMsg').classList.toggle('hide',!p.b);$('doneB').textContent=p.b?'Part B done':'Mark Part B done';timers.th.reset();timers.ft.reset()};
+const renderSet=()=>{$('lat').value=S.set.lat;$('optAuto').checked=DEV.auto!==false;$('optWake').checked=DEV.wake!==false;$('optLadder').checked=ladOn();$('optExact').checked=S.set.exact;$('optDrums').checked=S.set.drums;$('optMidiSnd').checked=S.set.midiSnd;$('optTapSnd').checked=S.set.tapSnd};
 const renderAll=()=>{renderDays();renderA();renderB();renderSet()};
 $('thQuiz').onclick=e=>{const b=e.target.closest('.ans');if(!b)return;const qi=+b.parentNode.dataset.q,oi=+b.dataset.o,p=P(S.day);if(p.quiz[qi]!==undefined)return;p.quiz[qi]=oi;timers.th.start();save();renderB()};
 $('ftSteps').onchange=e=>{const i=+e.target.dataset.i,p=P(S.day);p.steps[i]=e.target.checked;timers.ft.start();save()};
@@ -491,10 +528,10 @@ $('doneA').onclick=()=>{const p=P(S.day);p.a=true;S.log[today()]=true;save();ren
 $('doneB').onclick=()=>{const p=P(S.day);p.b=true;save();renderDays();$('doneBMsg').classList.remove('hide');$('doneB').textContent='Part B done'};
 const tabs=['A','B','S'];tabs.forEach(t=>$('tab'+t).onclick=()=>{tabs.forEach(u=>{$('tab'+u).setAttribute('aria-selected',u===t);$('p'+u).classList.toggle('hide',u!==t)});$('intro').classList.toggle('hide',t==='S');if(t!=='A')stop()});
 $('bpm').onchange=()=>{const v=+$('bpm').value;if(v>=40&&v<=160&&ladOn()){S.lad=S.lad||{};S.lad[S.day]=v;save();ladShow()}};
-$('lat').onchange=()=>{S.set.lat=+$('lat').value||0;save()};
-[['optLadder','ladder'],['optExact','exact'],['optDrums','drums'],['optMidiSnd','midiSnd'],['optTapSnd','tapSnd']].forEach(([id,k])=>$(id).onchange=()=>{S.set[k]=$(id).checked;save();if(k==='ladder'){$('bpm').value=ladOn()?ladBpm():drill().bpm;ladShow()}});
+$('lat').onchange=()=>{S.set.lat=DEV.lat=+$('lat').value||0;saveDev();save()};
+[['optLadder','ladder'],['optExact','exact'],['optDrums','drums'],['optMidiSnd','midiSnd'],['optTapSnd','tapSnd']].forEach(([id,k])=>$(id).onchange=()=>{S.set[k]=$(id).checked;if(DEVK.includes(k)){DEV[k]=S.set[k];saveDev()}save();if(k==='ladder'){$('bpm').value=ladOn()?ladBpm():drill().bpm;ladShow()}});
 $('expGo').onclick=async()=>{const c=btoa(unescape(encodeURIComponent(JSON.stringify(S))));$('code').value=c;try{await navigator.clipboard.writeText(c);$('codeMsg').textContent='Copied.'}catch(e){$('codeMsg').textContent='Select the code above and copy it.'}};
-$('impGo').onclick=()=>{try{const j=JSON.parse(decodeURIComponent(escape(atob($('code').value.trim()))));if(j.v!==1)throw 0;S=Object.assign(S,j);S.at=Date.now();save();renderAll();$('codeMsg').textContent='Loaded.'}catch(e){$('codeMsg').textContent='That code did not load.'}};
+$('impGo').onclick=()=>{try{const j=JSON.parse(decodeURIComponent(escape(atob($('code').value.trim()))));if(j.v!==1)throw 0;S=Object.assign(S,j);applyDev();S.at=Date.now();save();renderAll();$('codeMsg').textContent='Loaded.'}catch(e){$('codeMsg').textContent='That code did not load.'}};
 if(!S.p[S.day]){const f=D.findIndex((d,i)=>!(S.p[i+1]&&S.p[i+1].a));S.day=f<0?14:f+1}
 const thmSet=t=>{document.documentElement.dataset.theme=t;$('thmTxt').textContent=t==='dark'?'Light':'Dark';try{localStorage.setItem('keys-theme',t)}catch(e){}};
 thmSet(document.documentElement.dataset.theme||'dark');
