@@ -137,6 +137,17 @@ ul.plain{margin:6px 0;padding-left:20px}
 .chip{display:block;margin-top:8px;width:100%;min-height:40px;border:1px solid rgba(255,255,255,.55);background:rgba(0,0,0,.18);color:#fff;font:700 13px "Albert Sans",system-ui;cursor:pointer;text-align:left;padding:0 12px}
 .chip.on{border-color:var(--yel);color:var(--yel)}
 .bg{border-left:3px solid var(--pur3);padding-left:10px}
+.pgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding-top:6px}
+.pbtn{min-height:56px;border:1px solid #9a9ca2;border-radius:3px;background:linear-gradient(#ffffff,#e6e7ea);color:#111;box-shadow:0 3px 0 #9a9ca2;font:700 13px/1.15 "Albert Sans",system-ui;cursor:pointer;padding:6px}
+.pbtn:nth-child(even){background:linear-gradient(#2a2b30,#121316);color:#f1f1f3;border-color:#000;box-shadow:0 3px 0 #000}
+.pbtn[aria-pressed=true]{background:var(--yel);color:#0d0c10;border-color:#0d0c10;box-shadow:0 3px 0 #0d0c10}
+.pbtn:active{transform:translateY(2px)}
+.pbtn:focus-visible{outline:3px solid #fff;outline-offset:2px}
+.knobs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px 16px}
+label.knob{display:grid;gap:2px;font-size:12px;font-weight:700;color:#fff}
+label.knob span{font-weight:400;font-variant-numeric:tabular-nums;color:color-mix(in srgb,#fff 78%,var(--pur))}
+input[type=range]{width:100%;height:34px;accent-color:var(--yel)}
+@media(max-width:600px){.tab{white-space:nowrap;font-size:14px;padding:0 6px;gap:5px}.pgrid{grid-template-columns:repeat(2,minmax(0,1fr))}.knobs{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .tag{margin-top:24px;padding-top:8px;border-top:1px solid var(--hair);font-size:13px;color:var(--mute);text-align:right}
 @media(max-width:600px){.tier{padding:16px 14px 14px}.lower{padding:16px 10px 0}.kb{height:120px;border-left-width:10px;border-right-width:10px}.wrap{padding-top:10px}.st{height:24px;font-size:10px}.steps{gap:2px}.tabs{width:100%}.tab{flex:1;justify-content:center;padding:0 8px}}
 @media(prefers-reduced-motion:reduce){.meter span{transition:none}}
@@ -162,6 +173,7 @@ ul.plain{margin:6px 0;padding-left:20px}
   <div class="tabs" role="tablist">
     <button class="tab" role="tab" id="tabA" aria-selected="true"><svg class="ic" viewBox="0 0 18 18" aria-hidden="true"><rect x="1" y="3" width="16" height="12" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5 3v7M9 3v7M13 3v7" stroke="currentColor" stroke-width="2"/></svg>A: play</button>
     <button class="tab" role="tab" id="tabB" aria-selected="false"><svg class="ic" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 4h14M2 9h14M2 14h9" stroke="currentColor" stroke-width="2.5"/></svg>B: learn</button>
+    <button class="tab" role="tab" id="tabN" aria-selected="false"><svg class="ic" viewBox="0 0 18 18" aria-hidden="true"><path d="M1 9h3l2-6 3 12 3-9 2 3h3" fill="none" stroke="currentColor" stroke-width="2"/></svg>Sounds</button>
     <button class="tab" role="tab" id="tabS" aria-selected="false"><svg class="ic" viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9 9V3" stroke="currentColor" stroke-width="2.5"/></svg>Setup</button>
   </div>
 
@@ -171,7 +183,7 @@ ul.plain{margin:6px 0;padding-left:20px}
       <div class="tier" id="tier" style="position:relative"><i class="screw s1"></i><i class="screw s2"></i>
       <div class="devhead">
         <div><div class="code" id="drCode">KYS001</div><h2 id="drName">Drill</h2><div class="spec" id="drMeta"></div></div>
-        <div><div class="brk">Display</div><div class="oled" id="oled">READY</div><button class="chip" id="midiChip">Connect KeyStep</button></div>
+        <div><div class="brk">Display</div><div class="oled" id="oled">READY</div><button class="chip" id="midiChip">Connect KeyStep</button><button class="chip" id="sndLine">Sound: Keys</button></div>
       </div>
       <div class="mod"><div class="brk">Step sequencer</div>
       <div class="steps" id="steps"></div>
@@ -240,6 +252,32 @@ ul.plain{margin:6px 0;padding-left:20px}
       </div>
     </div>
     <div class="tag">Reading screen.</div>
+  </section>
+
+  <!-- SOUNDS -->
+  <section id="pN" class="hide">
+    <div class="dev"><div class="tier" style="position:relative"><i class="screw s1"></i><i class="screw s2"></i>
+      <div class="code">Sounds</div><h2 id="sndNow">Sound</h2>
+      <div class="brk" style="margin-top:14px">Patches</div>
+      <div class="pgrid" id="sndBtns"></div>
+      <div class="mod"><div class="brk">Shape</div>
+        <div class="knobs">
+          <label class="knob" for="kCut">Cutoff <input type="range" id="kCut" min="0" max="100" step="1"><span id="vCut"></span></label>
+          <label class="knob" for="kRes">Resonance <input type="range" id="kRes" min="0" max="20" step=".5"><span id="vRes"></span></label>
+          <label class="knob" for="kAtk">Attack <input type="range" id="kAtk" min="0" max="2000" step="10"><span id="vAtk"></span></label>
+          <label class="knob" for="kRel">Release <input type="range" id="kRel" min="20" max="3000" step="10"><span id="vRel"></span></label>
+        </div>
+      </div>
+    </div><div style="height:18px"></div></div>
+    <div class="grid2">
+      <div class="card"><h3>Try it</h3><p>Plays a chord, or a short riff for the acid bass. The KeyStep mod strip opens the filter live on every sound.</p>
+        <div class="row"><button class="btn org" id="sndTry">Play a chord</button><button class="btn ghost" id="sndReset">Reset this sound</button></div></div>
+      <div class="card"><h3>Lesson sounds</h3>
+        <label class="opt" for="optLessonSnd"><input type="checkbox" id="optLessonSnd"> Use lesson sounds</label>
+        <p class="note">Each lesson picks a sound that suits it: electric piano for scales, pad for chord changes, stab or organ for garage stabs. Pick a patch above to use your own on every lesson. Ear training always uses a plain sound.</p>
+        <p class="note">Patches are approximations in the style of each synth, not the real instruments or official sounds. Knob settings are saved on this device.</p></div>
+    </div>
+    <div class="tag">Sound screen.</div>
   </section>
 
   <!-- SETUP -->
@@ -462,7 +500,7 @@ setInterval(finalize,30);
 const startInt=()=>{const d=drill(),c=A(),bpm=+$('bpm').value||d.bpm,sp=60/bpm/4,L=d.bars*16;run={src:'int',bpm,sp,inst:[],loopEv:{},loopSc:{},loopDone:{},offs:[],wrong:0,win:winFor(Object.assign({},d,{bpm})),bar:-1,active:true,g:0,next:c.currentTime+.15,timer:0};$('winTxt').textContent=Math.round(run.win.tight);played.length=0;scrollToNotes(d.ev[0][1]);const lead=16;const sched=()=>{while(run&&run.next<c.currentTime+.12){const g=run.g,t=run.next;if(g<lead){if(g%4===0)click(t,g===0);const cd=4-Math.floor(g/4);setTimeout(()=>{if(run)$('oled').textContent='COUNT '+cd},Math.max(0,(t-c.currentTime)*1000))}else{const s=(g-lead)%L,loop=Math.floor((g-lead)/L);if(S.set.drums){if(s%4===0)kick(t);if(s%4===2)hat(t)}else if(s%4===0)click(t,s%16===0);const ev=evAt(s);if(ev)addInst(ev,perfAt(t)+outLat()+S.set.lat,loop);setTimeout(()=>{if(run&&run.src==='int')tickUI(s)},Math.max(0,(t-c.currentTime)*1000))}run.g++;run.next+=run.sp}};run.timer=setInterval(sched,25);sched();$('go').textContent='Stop';$('srcInfo').textContent='Loop: app, '+bpm+' BPM'};
 const stop=()=>{if(run&&run.timer)clearInterval(run.timer);run=null;$('go').textContent='Start loop';$('wait').textContent='Wait mode';$('oled').textContent='READY';showTarget(evAt(0),null);renderSteps(0)};
 $('go').onclick=()=>{if(run&&run.src==='int'){stop();return}if(ext.on){$('oled').textContent='PRESS PLAY ON CIRCUIT';return}if(run)stop();startInt();timers.drill.start()};
-$('demo').onclick=()=>{const d=drill(),c=A(),bpm=+$('bpm').value||d.bpm,sp=60/bpm/4,t0=c.currentTime+.1;d.ev.forEach(e=>e[1].forEach(n=>tone(n,t0+e[0]*sp,Math.min(.5,sp*3))))};
+$('demo').onclick=()=>{const d=drill(),c=A(),bpm=+$('bpm').value||d.bpm,sp=60/bpm/4,t0=c.currentTime+.1;d.ev.forEach(e=>e[1].forEach(n=>vOn(n,.8,t0+e[0]*sp,Math.min(.5,sp*3))))};
 
 /* wait mode */
 const showWait=()=>{const ev=drill().ev[run.idx];tickUI(ev[0]);scrollToNotes(ev[1])};
@@ -476,12 +514,12 @@ setInterval(()=>{if(ext.on&&performance.now()-ext.last>1500){ext.on=false;ext.ru
 
 /* note input */
 let ear=null,cal=null;
-const noteOn=(n,t,src)=>{if((src==='tap'&&S.set.tapSnd)||(src==='midi'&&S.set.midiSnd))tone(n,A().currentTime,.35,.22);played.push({n,t,used:false});if(cal)cal.taps.push(t);if(run&&run.src==='wait')waitNote(n);if(ear&&ear.mode==='d'&&!ear.answered)answerEar(((n-ear.root)%12+12)%12,true);if(!run){flash(n,'k-p')}};
+const noteOn=(n,t,src,vel=100)=>{if((src==='tap'&&S.set.tapSnd)||(src==='midi'&&S.set.midiSnd)){if(src==='midi')vOn(n,.35+.65*vel/127);else{vOn(n,.8);setTimeout(()=>vOff(n),350)}}played.push({n,t,used:false});if(cal)cal.taps.push(t);if(run&&run.src==='wait')waitNote(n);if(ear&&ear.mode==='d'&&!ear.answered)answerEar(((n-ear.root)%12+12)%12,true);if(!run){flash(n,'k-p')}};
 
 /* MIDI */
 let midi=null;
 const fillSel=()=>{if(!midi)return;const ins=[...midi.inputs.values()];const opt=(sel,pref)=>{const cur=$(sel).value;$(sel).innerHTML='<option value="">None</option>'+ins.map(i=>`<option value="${i.id}">${i.name.replace(/</g,'')}</option>`).join('');const p=ins.find(i=>i.id===cur)||ins.find(i=>pref.test(i.name));$(sel).value=p?p.id:''};opt('selNotes',/keystep/i);opt('selClock',/circuit/i);if(!$('selNotes').value&&ins[0]&&!/circuit/i.test(ins[0].name))$('selNotes').value=ins[0].id;bind();$('midiState').textContent=ins.length?'Connected: '+ins.map(i=>i.name).join(', ')+'.':'MIDI allowed, but no device found. Check the USB cable.'};
-const bind=()=>{for(const i of midi.inputs.values())i.onmidimessage=e=>{const [b,n,v]=e.data,isN=i.id===$('selNotes').value,isC=i.id===$('selClock').value;if(b>=0xF8||b===0xFA||b===0xFC){if(isC)onClock(b,e.timeStamp);return}if(!isN)return;if((b&0xF0)===0x90&&v>0)noteOn(n,e.timeStamp,'midi')}};
+const bind=()=>{for(const i of midi.inputs.values())i.onmidimessage=e=>{const [b,n,v]=e.data,isN=i.id===$('selNotes').value,isC=i.id===$('selClock').value;if(b>=0xF8||b===0xFA||b===0xFC){if(isC)onClock(b,e.timeStamp);return}if(!isN)return;const st=b&0xF0;if(st===0x90&&v>0)noteOn(n,e.timeStamp,'midi',v);else if(st===0x80||(st===0x90&&v===0))vOff(n);else if(st===0xB0&&n===1)modStrip(v)}};
 document.addEventListener('pointerdown',()=>{try{A()}catch(e){}},{once:true,capture:true});
 let curMode='';
 const chip=()=>{const c=$('midiChip');if(!midi){c.textContent='Connect KeyStep';c.classList.remove('on');return}const ins=[...midi.inputs.values()],ks=ins.find(i=>/keystep/i.test(i.name))||ins.find(i=>i.id===$('selNotes').value),circ=ins.some(i=>/circuit/i.test(i.name));c.textContent=ks?(ks.name.replace(/</g,'')+' connected, '+(circ?'Circuit mode':'Keys only')):'No keyboard found: check the cable';c.classList.toggle('on',!!ks)};
@@ -520,19 +558,53 @@ const renderDays=()=>{$('days').innerHTML=D.map((d,i)=>{const p=S.p[i+1]||{};ret
 const renderA=()=>{const d=drill(),p=P(S.day),it=INTRO[S.day-1];$('intro').innerHTML=`<div><b>Today</b>${it[0]}</div><div><b>Why it matters</b>${it[1]}</div>`+(it[2]?`<div><b>Listen for</b>${it[2]}</div>`:'');$('dayTitle').innerHTML='<b>'+code(S.day)+'</b> &nbsp;Weeks 1-2, day '+S.day+' of 14';$('drCode').textContent=code(S.day);$('drName').textContent=d.t;$('drMeta').innerHTML=[['Key',KEY(S.day)],['Target',d.bpm+' BPM'],['Bars',d.bars],['Hand','Right'],['Type',d.ev[0][1].length>1?'Chords':'Single notes'],['Goal',GOAL[S.day-1]]].map(x=>'<span>'+x[0]+' <b>'+x[1]+'</b></span>').join('');$('drHow').textContent=d.how+' New shape? Start in Wait mode, then the loop.';$('bpm').value=ladOn()?ladBpm():d.bpm;ladShow();$('earHow').textContent=EAR[d.ear];$('earInfo').textContent=d.ear==='m'?'Mixed day: the note under each question explains what it tests.':EARINFO[d.ear];$('earSc').textContent=p.ear[0]+'/'+p.ear[1];const key=today()+':'+S.day;$('scBest').textContent=S.best[key]?S.best[key]+'%':'-';$('scLast').textContent='-';$('scOff').textContent='-';$('scWrong').textContent='0';$('scBar').style.width='0';$('doneAMsg').classList.toggle('hide',!p.a);$('doneA').textContent=p.a?'Part A done':'Mark Part A done';renderSteps(0);showTarget(d.ev[0],null);setTimeout(()=>scrollToNotes(d.ev[0][1]),50);ear=null;$('earAns').innerHTML='';$('earMsg').textContent='';timers.drill.reset();timers.ear.reset()};
 const renderB=()=>{const th=THEORY[S.day-1],ft=FEAT[S.day-1],p=P(S.day);$('thTitle').textContent='Theory: '+th[0];$('thBody').innerHTML='<p class="bg"><b>Background.</b> '+BG[S.day-1]+'</p>'+th[1];$('thQuiz').innerHTML=th[2].map((q,qi)=>`<p style="margin-top:14px"><b>${q[0]}</b></p><div class="row" data-q="${qi}">${q[1].map((o,oi)=>`<button class="ans${p.quiz[qi]!==undefined?(oi===q[2]?' right':(oi===p.quiz[qi]?' wrong':'')):''}" data-o="${oi}">${o}</button>`).join('')}</div>`).join('');$('ftTitle').textContent='Feature: '+ft[0];$('ftSteps').innerHTML=ft[1].map((s,i)=>`<li><input type="checkbox" id="fs${i}" data-i="${i}"${p.steps[i]?' checked':''}><label for="fs${i}">${s}</label></li>`).join('');$('doneBMsg').classList.toggle('hide',!p.b);$('doneB').textContent=p.b?'Part B done':'Mark Part B done';timers.th.reset();timers.ft.reset()};
 const renderSet=()=>{$('lat').value=S.set.lat;$('optAuto').checked=DEV.auto!==false;$('optWake').checked=DEV.wake!==false;$('optLadder').checked=ladOn();$('optExact').checked=S.set.exact;$('optDrums').checked=S.set.drums;$('optMidiSnd').checked=S.set.midiSnd;$('optTapSnd').checked=S.set.tapSnd};
-const renderAll=()=>{renderDays();renderA();renderB();renderSet()};
+const renderAll=()=>{renderDays();renderA();renderB();renderSet();renderSnd()};
 $('thQuiz').onclick=e=>{const b=e.target.closest('.ans');if(!b)return;const qi=+b.parentNode.dataset.q,oi=+b.dataset.o,p=P(S.day);if(p.quiz[qi]!==undefined)return;p.quiz[qi]=oi;timers.th.start();save();renderB()};
 $('ftSteps').onchange=e=>{const i=+e.target.dataset.i,p=P(S.day);p.steps[i]=e.target.checked;timers.ft.start();save()};
 $('days').onclick=e=>{const b=e.target.closest('.day');if(!b)return;stop();S.day=+b.dataset.d;save();renderAll()};
 $('doneA').onclick=()=>{const p=P(S.day);p.a=true;S.log[today()]=true;save();renderDays();$('doneAMsg').classList.remove('hide');$('doneA').textContent='Part A done'};
 $('doneB').onclick=()=>{const p=P(S.day);p.b=true;save();renderDays();$('doneBMsg').classList.remove('hide');$('doneB').textContent='Part B done'};
-const tabs=['A','B','S'];tabs.forEach(t=>$('tab'+t).onclick=()=>{tabs.forEach(u=>{$('tab'+u).setAttribute('aria-selected',u===t);$('p'+u).classList.toggle('hide',u!==t)});$('intro').classList.toggle('hide',t==='S');if(t!=='A')stop()});
+const tabs=['A','B','N','S'];tabs.forEach(t=>$('tab'+t).onclick=()=>{tabs.forEach(u=>{$('tab'+u).setAttribute('aria-selected',u===t);$('p'+u).classList.toggle('hide',u!==t)});$('intro').classList.toggle('hide',t==='S'||t==='N');if(t!=='A')stop()});
 $('bpm').onchange=()=>{const v=+$('bpm').value;if(v>=40&&v<=160&&ladOn()){S.lad=S.lad||{};S.lad[S.day]=v;save();ladShow()}};
 $('lat').onchange=()=>{S.set.lat=DEV.lat=+$('lat').value||0;saveDev();save()};
 [['optLadder','ladder'],['optExact','exact'],['optDrums','drums'],['optMidiSnd','midiSnd'],['optTapSnd','tapSnd']].forEach(([id,k])=>$(id).onchange=()=>{S.set[k]=$(id).checked;if(DEVK.includes(k)){DEV[k]=S.set[k];saveDev()}save();if(k==='ladder'){$('bpm').value=ladOn()?ladBpm():drill().bpm;ladShow()}});
 $('expGo').onclick=async()=>{const c=btoa(unescape(encodeURIComponent(JSON.stringify(S))));$('code').value=c;try{await navigator.clipboard.writeText(c);$('codeMsg').textContent='Copied.'}catch(e){$('codeMsg').textContent='Select the code above and copy it.'}};
 $('impGo').onclick=()=>{try{const j=JSON.parse(decodeURIComponent(escape(atob($('code').value.trim()))));if(j.v!==1)throw 0;S=Object.assign(S,j);applyDev();S.at=Date.now();save();renderAll();$('codeMsg').textContent='Loaded.'}catch(e){$('codeMsg').textContent='That code did not load.'}};
 if(!S.p[S.day]){const f=D.findIndex((d,i)=>!(S.p[i+1]&&S.p[i+1].a));S.day=f<0?14:f+1}
+/* sound engine */
+const SND={
+ pad:{n:'Jupiter-style pad',o:[['sawtooth',-9,0,.5],['sawtooth',9,0,.5],['sawtooth',0,-1,.25]],cut:700,res:1.5,fe:2.2,fA:.9,fD:1.5,fS:.6,a:.5,d:.8,s:.85,r:1.2,ch:1,dl:[.36,.3,.18],lv:.32},
+ brass:{n:'Jupiter-style brass',o:[['sawtooth',-6,0,.5],['sawtooth',6,0,.5]],cut:450,res:3,fe:6,fA:.07,fD:.4,fS:.45,a:.03,d:.3,s:.8,r:.25,ch:1,lv:.36},
+ lead:{n:'Minilogue-style lead',o:[['sawtooth',0,0,.5],['square',-6,0,.3]],cut:1200,res:9,fe:3,fA:.005,fD:.3,fS:.35,a:.005,d:.25,s:.7,r:.2,dr:.35,dl:[.3,.35,.25],lv:.32},
+ stab:{n:'Juno-style stab',o:[['sawtooth',0,0,.6],['square',0,-1,.25]],cut:1500,res:4,fe:3,fA:.002,fD:.16,fS:.15,a:.002,d:.22,s:0,r:.12,ch:1,lv:.4},
+ organ:{n:'House organ',o:[['sine',0,0,.5],['sine',0,1,.35],['sine',0,2,.18],['square',0,1,.06]],cut:4500,res:1,fe:1.2,fA:.002,fD:.2,fS:.8,a:.003,d:.28,s:.3,r:.08,dl:[.25,.2,.12],lv:.42},
+ ep:{n:'Electric piano',o:[['fm',1,0,.7,1.6,.35],['sine',0,1,.08]],cut:5000,res:.7,fe:1,fA:.002,fD:.5,fS:1,a:.003,d:1.6,s:.25,r:.35,ch:1,lv:.5},
+ acid:{n:'Acid bass',o:[['sawtooth',0,-1,.85]],cut:260,res:16,fe:8,fA:.002,fD:.18,fS:0,a:.002,d:.25,s:.6,r:.08,dr:.5,lv:.4},
+ keys:{n:'Keys (simple)',o:[['sawtooth',0,0,.5],['triangle',7,0,.5]],cut:700,res:1,fe:3.7,fA:.005,fD:.35,fS:0,a:.01,d:.35,s:0,r:.12,lv:.45}};
+const LS=['ep','ep','ep','pad','pad','pad','brass','ep','ep','pad','pad','stab','organ','ep'];
+if(!('lessonSnd' in DEV))DEV.lessonSnd=true;
+const curSnd=()=>{const id=DEV.lessonSnd!==false?LS[S.day-1]:(DEV.snd||'keys');return SND[id]?id:'keys'};
+const K=id=>{const P=SND[id];return Object.assign({cut:P.cut,res:P.res,a:P.a,r:P.r},(DEV.knobs||{})[id]||{})};
+let bus=null,fx={},mod=0;const voices=new Map();
+const modMul=()=>2**(mod/127*3);
+const curve=k=>{const n=1024,c=new Float32Array(n),g=1+k*8;for(let i=0;i<n;i++){const x=i/(n-1)*2-1;c[i]=k>0?Math.tanh(x*g)/Math.tanh(g):x}return c};
+const applyFx=()=>{if(!bus)return;const P=SND[curSnd()],d=P.dl||[.3,0,0];fx.dr.curve=curve(P.dr||0);fx.ch.gain.value=P.ch?.45:0;fx.dl.delayTime.value=d[0];fx.fb.gain.value=d[1];fx.dw.gain.value=d[2]};
+const getBus=()=>{const c=A();if(bus)return bus;bus=c.createGain();bus.gain.value=.8;const out=c.createDynamicsCompressor();out.threshold.value=-12;out.knee.value=6;out.ratio.value=12;out.attack.value=.003;out.release.value=.2;out.connect(master);const dr=c.createWaveShaper();dr.oversample='2x';bus.connect(dr);dr.connect(out);const chIn=c.createGain(),ch=c.createGain();dr.connect(chIn);[[.45,-.7],[.6,.7]].forEach(([rate,pan])=>{const d=c.createDelay(.05);d.delayTime.value=.012;const l=c.createOscillator(),lg=c.createGain();l.frequency.value=rate;lg.gain.value=.004;l.connect(lg);lg.connect(d.delayTime);l.start();chIn.connect(d);if(c.createStereoPanner){const p=c.createStereoPanner();p.pan.value=pan;d.connect(p);p.connect(ch)}else d.connect(ch)});ch.connect(out);const dl=c.createDelay(1.5),fb=c.createGain(),dw=c.createGain();dr.connect(dl);dl.connect(fb);fb.connect(dl);dl.connect(dw);dw.connect(out);fx={dr,ch,dl,fb,dw};applyFx();return bus};
+const hold=(p,t)=>{if(p.cancelAndHoldAtTime)p.cancelAndHoldAtTime(t);else p.cancelScheduledValues(t)};
+const rel=(v,t,r)=>{try{hold(v.g.gain,t);v.g.gain.setTargetAtTime(0,t,Math.max(.01,r/4));v.srcs.forEach(s=>s.stop(t+r+.3))}catch(e){}};
+const vOn=(n,vel=.8,t,dur)=>{const c=A(),b=getBus(),id=curSnd(),P=SND[id],k=K(id);t=t||c.currentTime;const f=440*2**((n-69)/12),g=c.createGain(),f1=c.createBiquadFilter(),f2=c.createBiquadFilter();f1.type=f2.type='lowpass';f1.Q.value=.7;f2.Q.value=k.res;const base=Math.min(18000,k.cut*modMul()),peak=Math.min(18000,base*P.fe),sus=Math.max(30,Math.min(18000,base*(1+(P.fe-1)*P.fS)));[f1,f2].forEach(x=>{x.frequency.setValueAtTime(base,t);x.frequency.linearRampToValueAtTime(peak,t+P.fA+.001);x.frequency.setTargetAtTime(sus,t+P.fA+.001,Math.max(.01,P.fD/3))});const a=Math.max(.002,k.a),lvl=P.lv*vel;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(lvl,t+a);g.gain.setTargetAtTime(lvl*P.s,t+a,Math.max(.01,P.d/3));const srcs=[];P.o.forEach(o=>{const og=c.createGain();og.gain.value=o[3];if(o[0]==='fm'){const car=c.createOscillator(),mo=c.createOscillator(),mg=c.createGain();car.frequency.value=f*2**o[2];mo.frequency.value=f*o[1];mg.gain.setValueAtTime(f*o[4],t);mg.gain.setTargetAtTime(f*o[4]*.08,t,o[5]);mo.connect(mg);mg.connect(car.frequency);car.connect(og);srcs.push(car,mo)}else{const os=c.createOscillator();os.type=o[0];os.frequency.value=f*2**o[2];os.detune.value=o[1];os.connect(og);srcs.push(os)}og.connect(f1)});f1.connect(f2);f2.connect(g);g.connect(b);srcs.forEach(s=>s.start(t));const v={g,f:[f1,f2],srcs,P};if(dur!=null)rel(v,t+dur,k.r);else{if(voices.has(n))vOff(n);voices.set(n,v);if(voices.size>10){const k0=voices.keys().next().value;vOff(k0)}}return v};
+const vOff=n=>{const v=voices.get(n);if(!v)return;voices.delete(n);rel(v,A().currentTime,K(curSnd()).r)};
+const modStrip=v=>{mod=v;if(!ac)return;const now=ac.currentTime,k=K(curSnd()),b=Math.min(18000,k.cut*modMul());voices.forEach(x=>{const s=Math.max(30,Math.min(18000,b*(1+(x.P.fe-1)*x.P.fS)));x.f.forEach(fl=>{hold(fl.frequency,now);fl.frequency.setTargetAtTime(s,now,.03)})})};
+const showK=k=>{$('vCut').textContent=Math.round(k.cut)+' Hz';$('vRes').textContent=(+k.res).toFixed(1);$('vAtk').textContent=Math.round(k.a*1000)+' ms';$('vRel').textContent=Math.round(k.r*1000)+' ms'};
+const renderSnd=()=>{const id=curSnd(),k=K(id);$('sndBtns').innerHTML=Object.keys(SND).map(s=>`<button class="pbtn" data-s="${s}" aria-pressed="${s===id}">${SND[s].n}</button>`).join('');$('kCut').value=Math.round(Math.log(k.cut/80)/Math.log(12000/80)*100);$('kRes').value=k.res;$('kAtk').value=Math.round(k.a*1000);$('kRel').value=Math.round(k.r*1000);showK(k);$('optLessonSnd').checked=DEV.lessonSnd!==false;$('sndNow').textContent=SND[id].n+(DEV.lessonSnd!==false?', the lesson sound for '+code(S.day):', your choice');$('sndLine').textContent='Sound: '+SND[id].n;applyFx()};
+const setK=()=>{const id=curSnd();DEV.knobs=DEV.knobs||{};DEV.knobs[id]={cut:80*(12000/80)**($('kCut').value/100),res:+$('kRes').value,a:$('kAtk').value/1000,r:$('kRel').value/1000};saveDev();showK(DEV.knobs[id])};
+['kCut','kRes','kAtk','kRel'].forEach(x=>$(x).oninput=setK);
+const tryChord=()=>{const c=A(),t=c.currentTime+.05;if(curSnd()==='acid')[45,45,57,45,48,45,52,45].forEach((n,i)=>vOn(n,.9,t+i*.16,.12));else[57,60,64,67].forEach(n=>vOn(n,.75,t,1.2))};
+$('sndBtns').onclick=e=>{const b=e.target.closest('.pbtn');if(!b)return;DEV.snd=b.dataset.s;DEV.lessonSnd=false;saveDev();renderSnd();tryChord()};
+$('optLessonSnd').onchange=()=>{DEV.lessonSnd=$('optLessonSnd').checked;saveDev();renderSnd()};
+$('sndTry').onclick=tryChord;
+$('sndReset').onclick=()=>{const id=curSnd();if(DEV.knobs)delete DEV.knobs[id];saveDev();renderSnd()};
+$('sndLine').onclick=()=>$('tabN').click();
 const thmSet=t=>{document.documentElement.dataset.theme=t;$('thmTxt').textContent=t==='dark'?'Light':'Dark';try{localStorage.setItem('keys-theme',t)}catch(e){}};
 thmSet(document.documentElement.dataset.theme||'dark');
 $('thm').onclick=()=>thmSet(document.documentElement.dataset.theme==='dark'?'light':'dark');
