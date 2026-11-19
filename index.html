@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Keys</title>
+<script>try{document.documentElement.dataset.theme=localStorage.getItem("keys-theme")||"dark"}catch(e){document.documentElement.dataset.theme="dark"}</script>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0d0c10">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* VOICE everyday practice tool in a Sheffield label idiom: dry, exact, minimal
+   IDEA a record sleeve back and an instrument manual: catalogue number, spec block, one colour as identity
+   PICTURE the 37-key keyboard on a solid purple field, target keys acid yellow with finger numbers
+   COLOUR white ground, black ink, deep purple field, acid yellow accent, violet hits, red misses
+   TYPE Albert Sans 800 for codes, titles and figures; Albert Sans 400/600 for text
+   LAYOUT catalogue strip, spec header, purple instrument panel full width, two columns of ruled sections; phone stacks */
+:root{color-scheme:light dark;--bg:light-dark(#ffffff,#0d0c10);--ink:light-dark(#0d0c10,#f1f0f4);--mute:light-dark(#5d5a66,#a8a4b3);--line:light-dark(#0d0c10,#f1f0f4);--hair:light-dark(#d9d6df,#2b2833);--pur:#3567c4;--pur2:#24509f;--pur3:#5a86d8;--yel:#e2ff1f;--vio:#9b6bff;--red:#ff2d3c}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 "Albert Sans",system-ui,sans-serif;overflow-x:clip}
+h1,h2,h3,.big{font-family:"Albert Sans",system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;line-height:1.05;margin:0}
+h1{font-size:clamp(34px,6vw,52px)}
+h2{font-size:clamp(22px,3.4vw,30px)}
+h3{font-size:17px;letter-spacing:-.01em;display:flex;align-items:center;gap:8px}
+p{margin:.4em 0}
+svg.ic{width:18px;height:18px;flex:none}
+.wrap{max-width:1240px;margin:0 auto;padding:16px max(4vw,16px) 40px}
+.top{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:end;justify-content:space-between;padding-bottom:12px;border-bottom:3px solid var(--line)}
+.sub{color:var(--mute);font-size:15px;font-variant-numeric:tabular-nums}
+.sub b{color:var(--ink)}
+.stat{display:flex;gap:22px;flex-wrap:wrap;align-items:end}
+.thm{display:flex;align-items:center;gap:8px;min-height:40px;padding:0 12px;font-size:14px}
+.stat div{font-size:13px;color:var(--mute)}
+.stat b{display:block;font:800 26px/1 "Albert Sans",system-ui;color:var(--ink);font-variant-numeric:tabular-nums}
+.days{display:flex;gap:6px;overflow-x:auto;margin:4px 0 12px;padding:6px 2px 8px;scrollbar-width:thin}
+.day{flex:1 0 66px;height:52px;border:1px solid #9a9ca2;border-radius:3px;background:linear-gradient(#ffffff,#e6e7ea);color:#111;box-shadow:0 3px 0 #9a9ca2;font:800 14px/1 "Albert Sans",system-ui;cursor:pointer;display:grid;place-items:center;position:relative;font-variant-numeric:tabular-nums}
+.day:nth-child(even){background:linear-gradient(#2a2b30,#121316);color:#f1f1f3;border-color:#000;box-shadow:0 3px 0 #000}
+.day:active{transform:translateY(2px);box-shadow:0 1px 0 #000}
+.day::before{content:"";position:absolute;top:-6px;left:50%;width:6px;height:6px;margin-left:-3px;border-radius:50%;background:#3a3c42}
+.day[aria-current=true]{background:var(--pur);color:#fff;border-color:var(--pur2);box-shadow:0 3px 0 var(--pur2)}
+.day[aria-current=true]::before{background:var(--yel);box-shadow:0 0 6px var(--yel)}
+.day i{position:absolute;bottom:8px;width:6px;height:6px;background:#b8bac0}
+.day:nth-child(even) i{background:#4a4c52}
+.day i.a{left:calc(50% - 8px)}.day i.b{left:calc(50% + 2px)}
+.day i.on{background:var(--pur3)}
+.day[aria-current=true] i{background:var(--pur3)}.day[aria-current=true] i.on{background:var(--yel)}
+.intro{padding:4px 0 12px;display:grid;grid-template-columns:repeat(auto-fit,minmax(15em,1fr));gap:6px 28px}
+.intro div{font-size:15px}
+.intro b{display:block;font-size:13px;color:var(--mute);font-weight:600}
+.tabs{display:flex;margin:4px 0 16px;flex-wrap:wrap;border:2px solid var(--line);width:max-content;max-width:100%}
+.tab{min-height:44px;padding:0 16px;border:0;border-right:1px solid var(--hair);background:var(--bg);color:var(--ink);font:600 15px "Albert Sans",system-ui;cursor:pointer;display:flex;align-items:center;gap:8px}
+.tab:last-child{border-right:0}
+.tab[aria-selected=true]{background:var(--ink);color:var(--bg)}
+button{font:inherit}
+.btn{min-height:44px;padding:0 18px;border:2px solid var(--ink);background:var(--ink);color:var(--bg);font-weight:700;cursor:pointer;border-radius:0}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.org{background:var(--pur);border-color:var(--pur);color:#fff}
+.btn:focus-visible,.tab:focus-visible,.day:focus-visible,.ans:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--vio);outline-offset:2px}
+.btn:disabled{opacity:.45;cursor:default}
+/* instrument panel */
+.dev{position:relative;background:var(--pur);color:#fff;border-radius:0 0 22px 22px;margin-bottom:30px;box-shadow:0 1px 0 color-mix(in srgb,var(--pur) 60%,#000)}
+.tier{background:color-mix(in srgb,var(--pur) 86%,#fff);padding:18px 26px 16px;box-shadow:0 3px 0 color-mix(in srgb,var(--pur) 70%,#000)}
+.lower{padding:20px 26px 0}
+.screw{position:absolute;width:9px;height:9px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#f3f4f6,#9aa0a8 60%,#5d636b);box-shadow:inset 0 0 0 1px rgba(0,0,0,.35)}
+.screw::after{content:"";position:absolute;left:1px;right:1px;top:4px;height:1px;background:rgba(0,0,0,.45);transform:rotate(35deg)}
+.s1{left:9px;top:9px}.s2{right:9px;top:9px}.s3{left:9px;top:calc(var(--th,180px) - 2px)}.s4{right:9px;top:calc(var(--th,180px) - 2px)}
+.mod{background:color-mix(in srgb,var(--pur) 84%,#000);padding:10px 10px 8px;margin-top:14px}
+.brk{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;color:color-mix(in srgb,#fff 80%,var(--pur));margin-bottom:6px}
+.brk::before,.brk::after{content:"";flex:1;height:5px;border-top:1px solid currentColor}
+.brk::before{border-left:1px solid currentColor}.brk::after{border-right:1px solid currentColor}
+.days-l{color:var(--mute)}
+.devhead{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px 18px;align-items:start;padding:0 2px 12px}
+@media(max-width:600px){.devhead{grid-template-columns:minmax(0,1fr)}}
+.code{font:800 13px/1 "Albert Sans",system-ui;color:var(--yel);margin-bottom:6px;font-variant-numeric:tabular-nums}
+.spec{display:flex;flex-wrap:wrap;gap:4px 18px;margin-top:10px;font-size:13px;color:color-mix(in srgb,#fff 78%,var(--pur))}
+.spec span b{color:#fff;font-weight:700}
+.oled{background:#06070d;padding:8px 12px;font:700 14px/1.3 ui-monospace,Menlo,monospace;color:var(--yel);min-width:220px}
+.kbwrap{overflow-x:auto;position:relative;z-index:3;margin-bottom:-24px;padding-bottom:2px}
+.kb{position:relative;height:150px;min-width:660px;display:flex;user-select:none;touch-action:manipulation;border-left:16px solid #c9ccd1;border-right:16px solid #c9ccd1;border-image:linear-gradient(90deg,#9ea3aa,#eef0f2 45%,#b9bdc3) 1;box-shadow:0 8px 14px rgba(0,0,0,.25)}
+.wk{flex:1;position:relative;background:#fbfafc;border:1px solid var(--pur2);border-top:0;margin-right:1px;cursor:pointer}
+.bk{position:absolute;top:0;height:60%;background:#100d14;border:1px solid #000;border-top:0;z-index:2;cursor:pointer}
+.led{position:absolute;left:50%;top:-12px;width:6px;height:6px;margin-left:-3px;background:var(--pur3)}
+.kbtop{height:16px}
+.k-t{background:var(--yel)!important}
+.bk.k-t{background:var(--yel)!important}
+.k-t .led,.k-n .led{background:var(--yel)}
+.k-n{box-shadow:inset 0 -7px 0 var(--yel)}
+.k-p{filter:brightness(.8)}
+.k-h,.bk.k-h{background:#fff!important;filter:none!important;box-shadow:inset 0 0 0 5px var(--pur),0 0 16px #fff!important}
+.k-h .fn{color:var(--pur)}
+.k-m{background:var(--red)!important}
+.fn{position:absolute;bottom:10px;left:0;right:0;text-align:center;font:800 15px/1 "Albert Sans",system-ui;color:#0d0c10}
+.lbl{position:absolute;bottom:28px;left:0;right:0;text-align:center;font-size:11px;color:#8d859c}
+.steps{display:grid;grid-template-columns:repeat(16,minmax(0,1fr));gap:3px;margin-top:10px}
+.st{height:30px;background:color-mix(in srgb,var(--pur) 72%,#000);font-size:11px;font-weight:700;color:color-mix(in srgb,#fff 70%,var(--pur));display:grid;place-items:center;overflow:hidden;white-space:nowrap}
+.st.beat{background:color-mix(in srgb,var(--pur) 80%,#fff);color:#fff}
+.st.ev{background:#5f4a12;color:var(--yel)}
+.st.now{outline:2px solid #fff;outline-offset:-2px}
+.st.ev.now{background:var(--yel);color:#0d0c10}
+.barinfo{display:flex;justify-content:space-between;font-size:12px;color:color-mix(in srgb,#fff 78%,var(--pur));padding:8px 2px 0;font-variant-numeric:tabular-nums}
+/* sections */
+.grid2{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:8px 32px;margin-top:20px}
+@media(max-width:820px){.grid2{grid-template-columns:minmax(0,1fr)}}
+.card{border-top:3px solid var(--line);padding:12px 0 20px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.score{display:grid;grid-template-columns:repeat(auto-fit,minmax(6.5em,1fr));gap:10px;margin:14px 0 8px;border-top:1px solid var(--hair);padding-top:12px}
+.score div{font-size:13px;color:var(--mute)}
+.score b{display:block;font:800 clamp(28px,5vw,40px)/1 "Albert Sans",system-ui;color:var(--ink);white-space:nowrap;font-variant-numeric:tabular-nums}
+.meter{height:8px;background:var(--hair);overflow:hidden;margin:6px 0 4px}
+.meter span{display:block;height:100%;background:var(--pur3);width:0;transition:width .3s}
+.timer{font:800 20px/1 "Albert Sans",system-ui;white-space:nowrap;font-variant-numeric:tabular-nums}
+.timer.done{color:var(--pur3)}
+.tline{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px}
+.note{font-size:14px;color:var(--mute)}
+.ans{min-height:44px;min-width:56px;padding:0 14px;border:2px solid var(--ink);background:var(--bg);color:var(--ink);font-weight:700;cursor:pointer}
+.ans.right{background:var(--pur);border-color:var(--pur);color:#fff}
+.ans.wrong{background:var(--red);border-color:var(--red);color:#fff}
+ol.steps2{padding-left:0;list-style:none;margin:8px 0}
+ol.steps2 li{display:grid;grid-template-columns:44px minmax(0,1fr);gap:8px;padding:10px 0;border-top:1px solid var(--hair)}
+ol.steps2 input{width:22px;height:22px;margin:2px 0 0 4px;accent-color:var(--pur)}
+.flag{font-size:13px;color:var(--pur3);font-weight:700}
+:root[data-theme=dark] .flag{color:var(--vio)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .flag{color:var(--vio)}}
+label.opt{display:flex;gap:10px;align-items:center;min-height:44px}
+select,input[type=number]{font:16px "Albert Sans",system-ui;min-height:44px;padding:0 10px;border:2px solid var(--ink);border-radius:0;background:var(--bg);color:var(--ink);max-width:100%}
+textarea{width:100%;font:13px/1.4 ui-monospace,Menlo,monospace;min-height:70px;border:2px solid var(--ink);background:var(--bg);color:var(--ink);padding:8px}
+.theory p{max-width:68ch}
+.pill{display:inline-block;padding:3px 10px;background:var(--pur);color:#fff;font-size:13px;font-weight:700}
+.hide{display:none!important}
+.sync{font-size:13px;color:var(--mute)}
+ul.plain{margin:6px 0;padding-left:20px}
+.tag{margin-top:24px;padding-top:8px;border-top:1px solid var(--hair);font-size:13px;color:var(--mute);text-align:right}
+@media(max-width:600px){.tier{padding:16px 14px 14px}.lower{padding:16px 10px 0}.kb{height:120px;border-left-width:10px;border-right-width:10px}.wrap{padding-top:10px}.st{height:24px;font-size:10px}.steps{gap:2px}.tabs{width:100%}.tab{flex:1;justify-content:center;padding:0 8px}}
+@media(prefers-reduced-motion:reduce){.meter span{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div>
+      <h1>Keys</h1>
+      <div class="sub" id="dayTitle">Day 1</div>
+    </div>
+    <div class="stat">
+      <button class="btn ghost thm" id="thm" aria-label="Switch light or dark mode"><svg class="ic" viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9 2a7 7 0 0 1 0 14z" fill="currentColor"/></svg><span id="thmTxt">Light</span></button>
+      <div><b id="stStreak">0</b>day streak</div>
+      <div><b id="stA">0/14</b>Part A done</div>
+      <div><b id="stB">0/14</b>Part B done</div>
+    </div>
+  </div>
+  <div class="brk days-l" style="margin-top:12px">Lessons</div>
+  <nav class="days" id="days" aria-label="Days"></nav>
+  <div class="intro" id="intro"></div>
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" id="tabA" aria-selected="true"><svg class="ic" viewBox="0 0 18 18" aria-hidden="true"><rect x="1" y="3" width="16" height="12" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5 3v7M9 3v7M13 3v7" stroke="currentColor" stroke-width="2"/></svg>A: play</button>
+    <button class="tab" role="tab" id="tabB" aria-selected="false"><svg class="ic" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 4h14M2 9h14M2 14h9" stroke="currentColor" stroke-width="2.5"/></svg>B: learn</button>
+    <button class="tab" role="tab" id="tabS" aria-selected="false"><svg class="ic" viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9 9V3" stroke="currentColor" stroke-width="2.5"/></svg>Setup</button>
+  </div>
+
+  <!-- PART A -->
+  <section id="pA">
+    <div class="dev">
+      <div class="tier" id="tier" style="position:relative"><i class="screw s1"></i><i class="screw s2"></i>
+      <div class="devhead">
+        <div><div class="code" id="drCode">KYS001</div><h2 id="drName">Drill</h2><div class="spec" id="drMeta"></div></div>
+        <div><div class="brk">Display</div><div class="oled" id="oled">READY</div></div>
+      </div>
+      <div class="mod"><div class="brk">Step sequencer</div>
+      <div class="steps" id="steps"></div>
+      <div class="barinfo"><span id="barNo">Bar 1</span><span id="srcInfo">Loop: app</span></div>
+      </div>
+      </div>
+      <div class="lower"><div class="kbwrap" id="kbwrap"><div class="kbtop"></div><div class="kb" id="kb"></div></div></div>
+    </div>
+    <div class="grid2">
+      <div>
+        <div class="card">
+          <div class="tline"><h3><svg class="ic" viewBox="0 0 18 18" aria-hidden="true"><rect x="1" y="3" width="16" height="12" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5 3v7M9 3v7M13 3v7" stroke="currentColor" stroke-width="2"/></svg>Drill, 10 min</h3><span class="timer" id="tmDrill">10:00</span></div>
+          <p id="drHow"></p>
+          <div class="row" style="margin-top:10px">
+            <button class="btn org" id="go">Start loop</button>
+            <label class="opt" for="bpm" style="min-height:44px">BPM <input type="number" id="bpm" min="40" max="160" style="width:5.5em"></label>
+            <button class="btn ghost" id="demo">Hear it</button>
+            <button class="btn ghost" id="wait">Wait mode</button>
+          </div>
+          <div class="score">
+            <div><b id="scLast">-</b>last loop</div>
+            <div><b id="scBest">-</b>best today</div>
+            <div><b id="scOff">-</b>timing</div>
+            <div><b id="scWrong">0</b>wrong notes</div>
+          </div>
+          <div class="meter"><span id="scBar"></span></div>
+          <p class="note" id="ladTxt"></p>
+          <div class="note">Pass mark 80%. On time is within <span id="winTxt">90</span> ms; a little loose earns half.</div>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <div class="tline"><h3><svg class="ic" viewBox="0 0 18 18" aria-hidden="true"><path d="M3 9h2M7 5v8M11 2v14M15 6v6" stroke="currentColor" stroke-width="2.5"/></svg>Ear training, 5 min</h3><span class="timer" id="tmEar">5:00</span></div>
+          <p id="earHow"></p>
+          <div class="row"><button class="btn" id="earPlay">Play question</button><button class="btn ghost" id="earAgain">Again</button></div>
+          <div class="row" id="earAns" style="margin-top:10px"></div>
+          <p id="earMsg" class="note"></p>
+          <div class="score"><div><b id="earSc">0/0</b>today</div></div>
+        </div>
+        <div class="card">
+          <h3><svg class="ic" viewBox="0 0 18 18" aria-hidden="true"><rect x="2" y="2" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5 9l3 3 5-6" fill="none" stroke="currentColor" stroke-width="2.5"/></svg>Finish Part A</h3>
+          <p class="note">Counts towards your streak. Do it even if the drill is not passed yet.</p>
+          <button class="btn org" id="doneA">Mark Part A done</button>
+          <span id="doneAMsg" class="pill hide">Done</span>
+        </div>
+      </div>
+    </div>
+    <div class="tag">Practice screen.</div>
+  </section>
+
+  <!-- PART B -->
+  <section id="pB" class="hide">
+    <div class="grid2" style="margin-top:0">
+      <div class="card theory">
+        <div class="tline"><h3><svg class="ic" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 4h14M2 9h14M2 14h9" stroke="currentColor" stroke-width="2.5"/></svg><span id="thTitle">Theory</span></h3><span class="timer" id="tmTh">5:00</span></div>
+        <div id="thBody"></div>
+        <div id="thQuiz"></div>
+      </div>
+      <div class="card">
+        <div class="tline"><h3><svg class="ic" viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9 9V3" stroke="currentColor" stroke-width="2.5"/></svg><span id="ftTitle">Feature</span></h3><span class="timer" id="tmFt">10:00</span></div>
+        <ol class="steps2" id="ftSteps"></ol>
+        <p class="note">Steps marked "check on the unit" are not yet confirmed from Arturia or Novation docs.</p>
+        <button class="btn org" id="doneB">Mark Part B done</button>
+        <span id="doneBMsg" class="pill hide">Done</span>
+      </div>
+    </div>
+    <div class="tag">Reading screen.</div>
+  </section>
+
+  <!-- SETUP -->
+  <section id="pS" class="hide">
+    <div class="grid2" style="margin-top:0">
+      <div>
+        <div class="card">
+          <h3>MIDI</h3>
+          <p class="note" id="midiState">Not connected. Plug the KeyStep's USB-C into this device, then connect.</p>
+          <button class="btn org" id="midiGo">Connect MIDI</button>
+          <label class="opt" for="selNotes">Notes from <select id="selNotes"></select></label>
+          <label class="opt" for="selClock">Clock from <select id="selClock"></select></label>
+          <p class="note" id="clockState">No external clock. The app plays its own loop.</p>
+        </div>
+        <div class="card">
+          <h3>Timing</h3>
+          <p class="note">Tap any key along with 12 clicks. The app measures the delay of this device's speaker and MIDI and corrects for it.</p>
+          <div class="row"><button class="btn" id="calGo">Calibrate</button><span id="calMsg" class="note"></span></div>
+          <label class="opt" for="lat">Correction (ms) <input type="number" id="lat" step="5" style="width:6em"></label>
+        </div>
+        <div class="card">
+          <h3>Options</h3>
+          <label class="opt" for="optLadder"><input type="checkbox" id="optLadder"> Tempo ladder (start slower, +5 BPM per passed loop)</label>
+          <label class="opt" for="optExact"><input type="checkbox" id="optExact"> Exact octave (off = any octave counts)</label>
+          <label class="opt" for="optDrums"><input type="checkbox" id="optDrums"> Drums in the app loop</label>
+          <label class="opt" for="optMidiSnd"><input type="checkbox" id="optMidiSnd"> App sound for KeyStep notes (off when the Circuit makes the sound)</label>
+          <label class="opt" for="optTapSnd"><input type="checkbox" id="optTapSnd"> App sound for screen taps</label>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <h3>Wiring, as verified</h3>
+          <ul class="plain">
+            <li>KeyStep MIDI Out to Circuit MIDI In (5-pin).</li>
+            <li>KeyStep USB-C to this device (MacBook or Pixel) for power and MIDI into the app.</li>
+            <li>Circuit defaults: Synth 1 = ch 1, Synth 2 = ch 2, MIDI 1 = ch 3, MIDI 2 = ch 4, drums = ch 10.</li>
+            <li>Circuit clock into the app: Circuit USB to the MacBook too, then pick it under Clock from. On the Pixel the KeyStep uses the only port, so use the app loop.</li>
+            <li>Laptop sound: turn the UMC MIX knob towards the middle, or you will not hear the app.</li>
+            <li>Later (week 5): Circuit Thru set to copy Out, to KeyStep MIDI In for clock; KeyStep CV Pitch and Gate to the Crave.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Progress</h3>
+          <p class="sync" id="syncMsg">Saving on this device.</p>
+          <div class="row" id="authRow"><button class="btn org hide" id="authIn">Sign in with Google to sync</button><button class="btn ghost hide" id="authOut">Sign out</button><span class="note" id="authWho"></span></div>
+          <div class="row"><button class="btn ghost" id="expGo">Copy progress code</button><button class="btn ghost" id="impGo">Load code</button></div>
+          <textarea id="code" aria-label="Progress code" placeholder="Paste a progress code here, then Load code"></textarea>
+          <p class="note" id="codeMsg"></p>
+        </div>
+      </div>
+    </div>
+  <div class="tag">Setup screen.</div>
+  </section>
+</div>
+
+<script src="firebase-config.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+{
+const $=id=>document.getElementById(id);
+const NN=['C','C#','D','Eb','E','F','F#','G','Ab','A','Bb','B'];
+const nm=n=>NN[n%12]+(Math.floor(n/12)-1);
+const LO=48,HI=84;
+/* drills: ev = [step16, [notes], [fingers], label] */
+const seq=(notes,len,fing,label)=>notes.map((n,i)=>n==null?null:[i*len,[n],[fing[i]],label?label[i]:nm(n).replace(/\d/,'')]).filter(Boolean);
+const chords=(list,hits,fing)=>{const ev=[];list.forEach((c,b)=>hits.forEach(h=>ev.push([b*16+h,c[1],fing[b]||[1,3,5],c[0]])));return ev};
+const AM=[57,59,60,62,64,65,67,69],CM=[60,62,63,65,67,68,70,72];
+const upDown=s=>s.concat(s.slice(0,7).reverse());
+const SF=[1,2,3,1,2,3,4,5,4,3,2,1,3,2,1];
+const Am=['Am',[57,60,64]],Dm=['Dm',[62,65,69]],Em=['Em',[64,67,71]],Fr=['F',[65,69,72]],Cr=['C',[60,64,67]],Gr=['G',[67,71,74]];
+const Fv=['F',[57,60,65]],Cv=['C',[55,60,64]],Gv=['G',[55,59,62]];
+const Cm=['Cm',[60,63,67]],Fm=['Fm',[65,68,72]],Gm=['Gm',[67,70,74]],Abv=['Ab',[60,63,68]],Ebv=['Eb',[58,63,67]],Bbv=['Bb',[58,62,65]];
+const D=[
+ {t:'A minor five-finger',bars:2,bpm:75,ev:seq([57,59,60,62,64,62,60,59],4,[1,2,3,4,5,4,3,2]),how:'Right hand. Thumb on A, one finger per key up to E and back. One note per beat. Keep fingers curved and relaxed.',ear:'q'},
+ {t:'A minor scale, quarters',bars:4,bpm:75,ev:seq(upDown(AM),4,SF),how:'One octave up and down. Thumb tucks under after C (finger 3), then 4 and 5 reach the top A. On the way down finger 3 crosses over the thumb onto C.',ear:'q'},
+ {t:'A minor scale, eighths',bars:2,bpm:80,ev:seq(upDown(AM),2,SF),how:'Same fingering, twice as fast: two notes per beat. Even spacing matters more than speed.',ear:'q'},
+ {t:'Block triads: Am, Dm, Em',bars:4,bpm:80,ev:chords([Am,Dm,Em,Am],[0],[]),how:'Fingers 1, 3 and 5 on every chord. Lift and move the whole hand shape as one. Press all three keys together on beat 1.',ear:'i'},
+ {t:'Am, F, C, G (i-VI-III-VII)',bars:4,bpm:85,ev:chords([Am,Fr,Cr,Gr],[0,8],[]),how:'Root position, two hits per bar on beats 1 and 3. The hand jumps between chords: look ahead to the next shape.',ear:'i'},
+ {t:'Am, F, C, G, voice-led',bars:4,bpm:85,ev:chords([Am,Fv,Cv,Gv],[0,8],[[1,3,5],[1,2,5],[1,3,5],[1,3,5]]),how:'Same chords, closer shapes: keep shared notes still and move the others by one or two keys. Far less hand travel.',ear:'i'},
+ {t:'Progression pulse',bars:4,bpm:90,ev:chords([Am,Fv,Cv,Gv],[0,4,8,12],[[1,3,5],[1,2,5],[1,3,5],[1,3,5]]),how:'Voice-led shapes, one chord per bar played on every beat. Short and even, like a stab. Review day for A minor.',ear:'i'},
+ {t:'C minor five-finger',bars:2,bpm:80,ev:seq([60,62,63,65,67,65,63,62],4,[1,2,3,4,5,4,3,2]),how:'Thumb on C. Finger 3 sits on E flat, the black key. Keep the hand a little further in so the black key is easy.',ear:'d'},
+ {t:'C minor scale, eighths',bars:2,bpm:85,ev:seq(upDown(CM),2,SF),how:'C D Eb F G Ab Bb C. Thumb under after Eb. Three black keys: Eb, Ab, Bb.',ear:'d'},
+ {t:'C minor triads: Cm, Fm, Gm',bars:4,bpm:85,ev:chords([Cm,Fm,Gm,Cm],[0,8],[]),how:'Root position, fingers 1-3-5, beats 1 and 3. Middle finger lands on a black key in every chord.',ear:'d'},
+ {t:'Cm, Ab, Eb, Bb, voice-led',bars:4,bpm:90,ev:chords([Cm,Abv,Ebv,Bbv],[0,8],[[1,3,5],[1,2,5],[1,3,5],[1,2,4]]),how:'The day-5 progression moved to C minor. Shared notes stay, the rest move by step.',ear:'d'},
+ {t:'Off-beat stabs in C minor',bars:4,bpm:100,ev:chords([Cm,Abv,Ebv,Bbv],[2,10],[[1,3,5],[1,2,5],[1,3,5],[1,2,4]]),how:'Stab on the "and" after beats 1 and 3, leaving the beat for the kick. Short and crisp. A first taste of garage stabs.',ear:'m'},
+ {t:'Two keys: Am F then Cm Ab',bars:4,bpm:90,ev:chords([Am,Fv,Cm,Abv],[0,8],[[1,3,5],[1,2,5],[1,3,5],[1,2,5]]),how:'Bars 1-2 in A minor, bars 3-4 the same move three semitones up in C minor. Feel the shape stay the same.',ear:'m'},
+ {t:'Test: C minor scale at 100',bars:2,bpm:100,ev:seq(upDown(CM),2,SF),how:'Eighths at 100 BPM. Then try the A minor scale at the same speed by changing nothing but where your thumb starts.',ear:'m'}
+];
+const KEY=d=>d<=7?'A minor':(d===13?'A minor, C minor':'C minor');
+const GOAL=['2','1, 2','2','1','1','1','1','1','2','1','1','1','1','1, 2'];
+const code=d=>'KYS'+String(d).padStart(3,'0');
+const INTRO=[
+ ['Your home hand position: five fingers resting on A to E.','A fixed position lets you play without looking down, which you need when you are watching the Circuit live (goal 2).',''],
+ ['The A minor scale, one octave up and down.','This is the note set for your stabs and arps. Stay inside it and nothing you play will clash.','Most of your references sit in minor keys: Overmono, Joy Orbison, Daniel Avery.'],
+ ['The same scale at double speed, in even eighths.','Basslines and arps move in eighths and sixteenths. Even spacing is what makes them groove (goal 2).',''],
+ ['Triads: three-note chords built from the scale.','Every stab is a chord. These are the building blocks of your garage progression (goal 1).','The piano chords in Derrick May\'s "Strings of Life" are triad shapes.'],
+ ['Am, F, C, G: i-VI-III-VII, a classic minor loop.','This is a ready-made template to write your own stab progression on (goal 1).','This loop turns up across house, trance and garage.'],
+ ['Voice leading: moving between chords with the fewest notes.','Smooth changes sound produced rather than played, and a still hand frees you to focus on rhythm (goal 1).','Listen to almost any deep house or garage keys part: the top notes barely move.'],
+ ['Chords played in time, one stab on every beat.','A stab is a chord locked to the grid. This is the first step from chord shapes to a groove (goal 1).','Listen for the bright synth chord stabs in Joy Orbison\'s "Hyph Mngo".'],
+ ['C minor: your first key with black keys.','A second key lets you match your track, a vocal or a sample. Your garage track is in a minor key (goal 1).',''],
+ ['The C minor scale in eighths.','This is the note set for the techno basslines in weeks 5-6 (goal 2).',''],
+ ['Triads in C minor.','This is your stab palette in a second key, including the v chord, which pulls back home.',''],
+ ['The day-5 loop moved to C minor.','Learn progressions as shapes, and you can move one to whatever key your chopped vocal hook is in (goal 1).',''],
+ ['Off-beat stabs between the beats.','This is the core of goal 1: garage stabs sit around the kick, not on it.','MJ Cole\'s "Sincere" and the garage-leaning tracks of your Overmono references.'],
+ ['Switching keys mid-loop.','Key changes lift a breakdown or a drop, and transposing becomes second nature.',''],
+ ['A test at 100 BPM.','It checks that weeks 1-2 have stuck before weeks 3-4 add 7th and 9th chords. Your garage target is 134 BPM.','']
+];
+const THEORY=[
+ ['Finding notes',`<p>The black keys come in groups of two and three. C is the white key just left of each pair; A sits between the second and third keys of each group of three.</p><p>An octave is 12 keys (semitones), white and black. Every C is 12 apart in MIDI note numbers. Middle C is note 60; it is called C4 here, but some makers call it C3.</p>`,[['How many semitones in an octave?',['7','8','12'],2],['C is just left of the group of...',['two black keys','three black keys'],0]]],
+ ['Tones, semitones and the minor scale',`<p>A semitone is the next key, black or white. A tone is two semitones.</p><p>The natural minor scale follows T S T T S T T. From A that gives A B C D E F G A, all white keys. A minor shares its notes with C major: they are relative keys.</p>`,[['Natural minor pattern?',['T T S T T T S','T S T T S T T'],1],['Which is a semitone?',['B to C','C to D'],0]]],
+ ['Triads',`<p>A triad is three notes stacked in thirds: root, third and fifth. A minor third is 3 semitones, a major third 4.</p><p>Minor triad: minor third then major third (A, C, E). Major triad: major third then minor third (C, E, G). The middle note decides the mood.</p>`,[['Am is...',['A C# E','A C E','A D E'],1],['A major triad starts with a...',['major third','minor third'],0]]],
+ ['Chords in A minor',`<p>Build a triad on each note of the scale using only scale notes: Am, Bdim, C, Dm, Em, F, G.</p><p>Roman numerals name them by position: i, ii°, III, iv, v, VI, VII. Lower case means minor. This is how producers talk about progressions in any key.</p>`,[['The iv chord in A minor?',['D minor','D major','E minor'],0],['VI in A minor is...',['F','G','C'],0]]],
+ ['The i-VI-III-VII progression',`<p>Am, F, C, G is i-VI-III-VII, one of the most used minor progressions in dance music. It loops well because G (VII) sits one tone under A and pulls back to the start.</p><p>Change the rhythm and it can sound like anything from trance pads to garage stabs.</p>`,[['VII leads back to...',['i','iv'],0],['In A minor, III is...',['C','E'],0]]],
+ ['Inversions and voice leading',`<p>An inversion puts a different chord note at the bottom: F as A C F instead of F A C. Same chord, new shape.</p><p>Voice leading picks the shapes that move least: keep notes two chords share, move the rest by step. It sounds smoother and frees your hand for rhythm.</p>`,[['Am and F share...',['A and C','E and F'],0],['Voice leading aims to...',['move notes as little as possible','always play root position'],0]]],
+ ['Rhythm on a 16-step grid',`<p>In 4/4 a bar has four beats. The Circuit splits a bar into 16 steps, so a beat is 4 steps, an eighth note 2 and a sixteenth 1.</p><p>BPM counts beats per minute. 75 BPM is a practice speed; your garage track sits at 134.</p>`,[['Steps in one beat on the Circuit?',['2','4','16'],1],['An eighth note is...',['2 steps','4 steps'],0]]],
+ ['C minor',`<p>Apply T S T T S T T from C: C D Eb F G Ab Bb C. Three flats.</p><p>Its relative major is E flat major, which shares those notes. Many techno and garage tracks sit in C minor or near it.</p>`,[['How many flats in C minor?',['2','3','4'],1],['The 6th note of C minor?',['A','Ab'],1]]],
+ ['Relative and parallel keys',`<p>Relative keys share notes: A minor and C major. Parallel keys share a root: C minor and C major.</p><p>Moving A minor to C minor is a transposition of three semitones up: every note, every chord, same shapes.</p>`,[['C minor and C major are...',['relative','parallel'],1],['A to C is how many semitones?',['3','4'],0]]],
+ ['Chords in C minor',`<p>Cm, Ddim, Eb, Fm, Gm, Ab, Bb: i, ii°, III, iv, v, VI, VII.</p><p>Classical harmony often raises the 7th (B natural) to make the v chord major (G), for a stronger pull home. Dance music often keeps the softer natural-minor Gm.</p>`,[['v in C natural minor?',['G major','G minor'],1],['Raising the 7th gives...',['harmonic minor','major'],0]]],
+ ['Same shape, new key',`<p>i-VI-III-VII in C minor is Cm, Ab, Eb, Bb. Every chord moved up three semitones from the A minor version.</p><p>Learn progressions as shapes and numbers, not letter names, and you can play them in any key.</p>`,[['VI in C minor?',['Ab','A'],0],['VII in C minor?',['Bb','B'],0]]],
+ ['Syncopation and stabs',`<p>Syncopation puts accents off the beat. Playing on the "and" between beats leaves the beat itself for the kick, which is why stabs and the kick lock together.</p><p>In garage, short off-beat stabs plus swing give the bounce. Gate length matters as much as the notes.</p>`,[['An off-beat stab lands...',['on the beat','between beats'],1],['Short stabs mean...',['short gate','long gate'],0]]],
+ ['Intervals cheat sheet',`<p>Minor 3rd = 3 semitones, major 3rd = 4, perfect 4th = 5, perfect 5th = 7, octave = 12.</p><p>Every chord in these two weeks is built from them. Ear training next week adds the 7th: A minor 7 is A C E G.</p>`,[['Perfect 5th?',['5','7'],1],['Major 3rd?',['4','3'],0]]],
+ ['Review and next steps',`<p>You can now play two minor scales, build triads in two keys and play i-VI-III-VII in two rhythms.</p><p>Weeks 3-4: minor 7th and 9th chords for garage stabs, velocity for feel, and the Gate Length slider on every stab.</p>`,[['Am7 adds which note?',['G','F'],0],['i-VI-III-VII in A minor?',['Am F C G','Am Dm Em Am'],0]]]
+];
+const U=' <span class="flag">check on the unit</span>';
+const FEAT=[
+ ['Connect and play Synth 1',['KeyStep MIDI Out to Circuit MIDI In with a 5-pin cable. KeyStep USB-C to this device.','On the Circuit open Setup View: Shift + Save. Check Synth 1 is on channel 1 and Note receive (pad 25) is lit. Press Play to save and exit.','Set the KeyStep to MIDI channel 1.'+U,'Play a few keys: you should hear Synth 1. In Setup here, press Connect MIDI and pick the KeyStep.']],
+ ['Octave buttons',['Press Octave + and Octave -: the range shifts by an octave each press.','Find the octave where middle C sits mid-keyboard. Reset to centre (on the mk1 both buttons together).'+U,'While playing, turn Circuit Macro 5 (Filter Frequency) to hear the sound open.']],
+ ['Synth 1 and Synth 2',['Switch the KeyStep to channel 2 and play: now Synth 2 sounds.'+U,'Back to channel 1. Play the A minor scale on each synth and pick the one you prefer for practice.','On the Circuit, open Scales and set A minor, so the pads match what you play.']],
+ ['First arpeggio',['Switch the KeyStep to Arp mode.'+U,'Press Hold, then play Am (A C E): the arp keeps going after you let go.','Pick mode Up. Tap the Tempo button several times to set the speed.','Play Dm and Em while Hold is on and listen to the arp follow.']],
+ ['Arp modes and gate',['Try Up, Down, UpDown, Random, Order and Poly over Am, F, C, G.','Move the Gate Length slider: arp gate runs from 10% (plucky) to 90% (smooth).','Choose your favourite mode and gate for Am-F-C-G and note them in your head for week 7.']],
+ ['Sync the arp to the Circuit',['Needs a second 5-pin cable. Power the Circuit on while holding Shift (Advanced Setup) and set the Thru port to copy MIDI Out.'+U,'Circuit MIDI Thru to KeyStep MIDI In.','KeyStep: press the encoder, go to Sync, then Clock Receive, choose MIDI, press Back.','Press Play on the Circuit: the arp now locks to its tempo. Turn KeyStep MIDI Thru off if notes double.'+U,'No cable yet? Match tempos by tapping both and move on.']],
+ ['Arp range and added notes',['Hold Shift and press the Arpeggio Octave keys to spread the arp up to 4 octaves.','With Hold on, add notes using Hold and Octave -/+ (up to 64 notes).','Play 2 minutes of arp over a Circuit drum pattern.']],
+ ['Record into the Circuit',['Select Synth 1 on the Circuit, start a drum pattern and press Record.','Play the C minor five-finger drill from the KeyStep: it records into the pattern.','Stop recording, mute Synth 1 in Mixer View, and the pads play live instead.']],
+ ['Circuit tempo and swing',['Open Tempo View (Tempo/Swing). Shift + Tempo/Swing taps tempo (three taps or more).','Swing runs 20 to 80, default 50. Try 55 to 60 on a hat pattern for garage bounce.','Swing is not saved at power-off, so set it each session.']],
+ ['Spice and Mutate',['Run an arp. Hold Shift and slide the Mod strip: Spice adds random gate, silence and ratchets.','On the Circuit, record a short Synth 1 pattern, then Shift + Duplicate to Mutate it.','Compare: Spice changes the KeyStep live, Mutate rewrites the Circuit pattern.']],
+ ['KeyStep sequencer basics',['Turn an arp into a sequence: long-press Record, or Shift + To Seq.','In the sequencer, Hold enters a rest. Undo removes the last recorded step.','The sequencer holds up to 64 steps, 8 notes per step. Record Cm-Ab-Eb-Bb as four steps.']],
+ ['Short stabs',['Play the off-beat stab drill through Synth 1.','Shorten the sound: turn Macro 3 (Amp Envelope) down on the Circuit.','For the arp, pull the Gate Length slider down for stabby notes.']],
+ ['Transpose',['Use Octave -/+ to play the same drill in a higher and lower octave.','In Setup here, turn on Exact octave and try the drill again.','Set the Circuit scale to C minor and play the C minor scale on its pads too.']],
+ ['Performance check',['Start a Circuit drum pattern at about 100 BPM.','KeyStep arp on Synth 1, Hold on, play Cm-Ab-Eb-Bb, bring in Spice for the last 8 bars.','Record 3 minutes through the UMC or on the phone, and listen back.']]
+];
+const EAR={q:'Major or minor triad? Listen to the middle note.',i:'Name the interval between the two notes.',d:'You hear the home chord, then one note. Which scale degree is it? You can also answer by playing it.',m:'Mixed: chord quality, intervals and degrees.'};
+
+/* state */
+const today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+let S={v:1,at:0,day:1,set:{lat:0,exact:false,drums:true,midiSnd:false,tapSnd:true},p:{},log:{},best:{}};
+const P=d=>S.p[d]||(S.p[d]={a:false,b:false,steps:[],quiz:{},ear:[0,0]});
+try{const j=JSON.parse(localStorage.getItem('ks-lessons-v1')||'null');if(j&&j.v===1)S=Object.assign(S,j)}catch(e){}
+let db=null,docRef=null,saveT=0,writing=false,pending=false;
+const save=()=>{S.at=Date.now();try{localStorage.setItem('ks-lessons-v1',JSON.stringify(S))}catch(e){}clearTimeout(saveT);saveT=setTimeout(push,1500)};
+const push=async()=>{if(!docRef)return;if(writing){pending=true;return}writing=true;try{await docRef.set(JSON.parse(JSON.stringify(S)));$('syncMsg').textContent='Synced to your account, '+new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})+'.'}catch(e){$('syncMsg').textContent='Could not sync just now; saved on this device.'}writing=false;if(pending){pending=false;push()}};
+const attach=async(ref,label)=>{docRef=ref;const t=setTimeout(()=>{$('syncMsg').textContent='Sync not reachable yet; saving on this device.'},10000);try{const snap=await docRef.get();clearTimeout(t);const r=snap.exists?snap.data():null;if(r&&r.v===1&&(r.at||0)>(S.at||0)){S=Object.assign(S,JSON.parse(JSON.stringify(r)));try{localStorage.setItem('ks-lessons-v1',JSON.stringify(S))}catch(e){}renderAll()}$('syncMsg').textContent=label;if(!r||(S.at||0)>(r.at||0))push()}catch(e){clearTimeout(t);docRef=null;$('syncMsg').textContent='Could not reach sync; saving on this device.'}};
+(async()=>{try{if(!window.claude||!claude.use)return;const [d,u]=await Promise.all([claude.use('db'),claude.use('user')]);if(!d||!u)return;const id=await u.id();if(!id)return;attach(d.doc('data/users/'+id+'/progress'),'Progress syncs between your phone and laptop.')}catch(e){}})();
+(()=>{const cfg=window.KEYS_FB;if(!cfg||!cfg.apiKey||typeof firebase==='undefined'){$('syncMsg').textContent='Saving on this device. Account sync is not set up yet.';return}try{firebase.initializeApp(cfg);const auth=firebase.auth(),fs=firebase.firestore();$('authIn').onclick=async()=>{try{await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())}catch(e){try{await auth.signInWithRedirect(new firebase.auth.GoogleAuthProvider())}catch(e2){$('syncMsg').textContent='Sign-in did not work: '+(e2.code||e.code||'error')}}};$('authOut').onclick=()=>auth.signOut();auth.onAuthStateChanged(u=>{$('authIn').classList.toggle('hide',!!u);$('authOut').classList.toggle('hide',!u);$('authWho').textContent=u?'Signed in as '+(u.email||'you'):'';if(u)attach(fs.collection('users').doc(u.uid),'Progress syncs to your Google account on every device.');else{docRef=null;$('syncMsg').textContent='Saving on this device. Sign in to sync.'}})}catch(e){$('syncMsg').textContent='Saving on this device only.'}})();
+
+/* audio */
+let ac=null,master=null,noiseBuf=null;
+const A=()=>{if(!ac){ac=new (window.AudioContext||window.webkitAudioContext)();master=ac.createGain();master.gain.value=.5;master.connect(ac.destination);noiseBuf=ac.createBuffer(1,ac.sampleRate*.2,ac.sampleRate);const d=noiseBuf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1}if(ac.state==='suspended')ac.resume();return ac};
+const tone=(n,t,dur,v=.25)=>{const c=A(),o=c.createOscillator(),o2=c.createOscillator(),f=c.createBiquadFilter(),g=c.createGain();o.type='sawtooth';o2.type='triangle';o.frequency.value=o2.frequency.value=440*2**((n-69)/12);o2.detune.value=7;f.type='lowpass';f.frequency.setValueAtTime(2600,t);f.frequency.exponentialRampToValueAtTime(700,t+dur);g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.01);g.gain.exponentialRampToValueAtTime(.001,t+dur);o.connect(f);o2.connect(f);f.connect(g);g.connect(master);o.start(t);o2.start(t);o.stop(t+dur+.05);o2.stop(t+dur+.05)};
+const kick=t=>{const c=A(),o=c.createOscillator(),g=c.createGain();o.frequency.setValueAtTime(140,t);o.frequency.exponentialRampToValueAtTime(45,t+.12);g.gain.setValueAtTime(.9,t);g.gain.exponentialRampToValueAtTime(.001,t+.3);o.connect(g);g.connect(master);o.start(t);o.stop(t+.32)};
+const hat=(t,v=.18)=>{const c=A(),s=c.createBufferSource(),f=c.createBiquadFilter(),g=c.createGain();s.buffer=noiseBuf;f.type='highpass';f.frequency.value=7000;g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+.05);s.connect(f);f.connect(g);g.connect(master);s.start(t);s.stop(t+.06)};
+const click=(t,acc)=>{const c=A(),o=c.createOscillator(),g=c.createGain();o.frequency.value=acc?1800:1200;g.gain.setValueAtTime(.35,t);g.gain.exponentialRampToValueAtTime(.001,t+.04);o.connect(g);g.connect(master);o.start(t);o.stop(t+.05)};
+const outLat=()=>ac?((ac.outputLatency||0)+(ac.baseLatency||0))*1000:0;
+const perfAt=ct=>performance.now()+(ct-ac.currentTime)*1000;
+
+/* keyboard */
+const isBlack=n=>[1,3,6,8,10].includes(n%12);
+const whites=[];for(let n=LO;n<=HI;n++)if(!isBlack(n))whites.push(n);
+const keyEl={};
+(()=>{const kb=$('kb');let h='';whites.forEach(n=>{h+=`<div class="wk" data-n="${n}"><span class="led"></span>${n%12===0?`<span class="lbl">${nm(n)}</span>`:''}<span class="fn"></span></div>`});kb.innerHTML=h;const W=100/whites.length;for(let n=LO;n<=HI;n++)if(isBlack(n)){const wi=whites.indexOf(n-1);const b=document.createElement('div');b.className='bk';b.dataset.n=n;b.style.left=((wi+1)*W-W*.31)+'%';b.style.width=(W*.62)+'%';b.innerHTML='<span class="led"></span><span class="fn"></span>';kb.appendChild(b)}kb.querySelectorAll('[data-n]').forEach(e=>keyEl[e.dataset.n]=e);
+kb.addEventListener('pointerdown',e=>{const k=e.target.closest('[data-n]');if(!k)return;e.preventDefault();const n=+k.dataset.n;noteOn(n,performance.now(),'tap');k.classList.add('k-p');setTimeout(()=>k.classList.remove('k-p'),160)})})();
+const clearKeys=cls=>Object.values(keyEl).forEach(e=>e.classList.remove(cls));
+const flash=(n,cls)=>{const e=keyEl[n];if(!e)return;e.classList.add(cls);setTimeout(()=>e.classList.remove(cls),260)};
+const showTarget=(ev,nextEv)=>{Object.values(keyEl).forEach(e=>{e.classList.remove('k-t','k-n');e.querySelector('.fn').textContent=''});if(nextEv)nextEv[1].forEach(n=>keyEl[n]&&keyEl[n].classList.add('k-n'));if(ev)ev[1].forEach((n,i)=>{const e=keyEl[n];if(!e)return;e.classList.add('k-t');e.querySelector('.fn').textContent=ev[2][i]||''})};
+const scrollToNotes=notes=>{const w=$('kbwrap'),e=keyEl[Math.min(...notes)];if(e&&w.scrollWidth>w.clientWidth)w.scrollLeft=Math.max(0,e.offsetLeft-40)};
+
+/* ladder */
+const ladOn=()=>S.set.ladder!==false;
+const ladStart=d=>Math.max(50,d.bpm-15);
+const ladBpm=()=>{const d=drill();S.lad=S.lad||{};return S.lad[S.day]||ladStart(d)};
+const ladShow=()=>{const d=drill();$('ladTxt').textContent=ladOn()?'Tempo ladder: now '+ladBpm()+' BPM, target '+d.bpm+'. Pass a loop to go up 5.':'Tempo ladder off.'};
+/* drill engine */
+let run=null;
+const drill=()=>D[S.day-1];
+const pcOk=(req,n)=>S.set.exact?req===n:(req%12)===(n%12);
+const played=[];
+const renderSteps=(bar)=>{const d=drill(),L=d.bars*16;let h='';for(let i=0;i<16;i++){const s=bar*16+i;const ev=d.ev.find(e=>e[0]===s);h+=`<div class="st${i%4===0?' beat':''}${ev?' ev':''}" id="st${i}">${ev?ev[3]:(i%4===0?i/4+1:'')}</div>`}$('steps').innerHTML=h;$('barNo').textContent='Bar '+(bar+1)+' of '+d.bars};
+const evAt=s=>drill().ev.find(e=>e[0]===s);
+const nextEvAfter=s=>{const d=drill(),L=d.bars*16;let best=null,bd=1e9;d.ev.forEach(e=>{let dd=(e[0]-s+L)%L;if(dd===0)dd=L;if(dd<bd){bd=dd;best=e}});return best};
+const winFor=d=>{const g=[];for(let i=1;i<d.ev.length;i++)g.push(d.ev[i][0]-d.ev[i-1][0]);const minG=Math.min(16,...g.filter(x=>x>0));const ms=minG*60000/d.bpm/4;return{tight:Math.min(90,ms*.25),loose:Math.min(170,ms*.45)}};
+const tickUI=(loopStep)=>{const d=drill(),bar=Math.floor(loopStep/16);if(!run||run.bar!==bar){if(run)run.bar=bar;renderSteps(bar)}document.querySelectorAll('.st.now').forEach(e=>e.classList.remove('now'));const el=$('st'+(loopStep%16));if(el)el.classList.add('now');const ev=evAt(loopStep);showTarget(ev,nextEvAfter(loopStep))};
+const addInst=(ev,tExp,loop)=>{run.inst.push({ev,t:tExp,loop,done:false});run.loopEv[loop]=(run.loopEv[loop]||0)+1};
+const finalize=()=>{if(!run||run.src==='wait')return;const now=performance.now(),W=run.win;run.inst.forEach(I=>{if(I.done||now<I.t+W.loose)return;I.done=true;let maxd=0,found=0,sum=0;I.ev[1].forEach(req=>{let best=null,bd=1e9;played.forEach(p=>{if(p.used)return;const dt=p.t-I.t;if(Math.abs(dt)<=W.loose&&pcOk(req,p.n)&&Math.abs(dt)<bd){bd=Math.abs(dt);best=p}});if(best){best.used=true;found++;sum+=best.t-I.t;maxd=Math.max(maxd,Math.abs(best.t-I.t));flash(best.n,'k-h')}else flash(req,'k-m')});let sc=0;if(found===I.ev[1].length)sc=maxd<=W.tight?1:.5;else if(found>0)sc=.25*found/I.ev[1].length;if(found){run.offs.push(sum/found)}run.loopSc[I.loop]=(run.loopSc[I.loop]||0)+sc;run.loopDone[I.loop]=(run.loopDone[I.loop]||0)+1;if(run.loopDone[I.loop]===drill().ev.length)loopEnd(I.loop)});run.inst=run.inst.filter(I=>!I.done);for(let i=played.length-1;i>=0;i--){const p=played[i];if(now-p.t>W.loose+400){if(!p.used&&run.active){run.wrong++;$('scWrong').textContent=run.wrong}played.splice(i,1)}}};
+const loopEnd=l=>{if(l===0&&run.src==='ext')return;const pct=Math.round(100*run.loopSc[l]/drill().ev.length);$('scLast').textContent=pct+'%';$('scBar').style.width=pct+'%';const key=today()+':'+S.day;const prev=S.best[key]||0;if(pct>prev){S.best[key]=pct;save()}$('scBest').textContent=(S.best[key]||0)+'%';const o=run.offs.slice(-12);if(o.length){const m=Math.round(o.reduce((a,b)=>a+b,0)/o.length);$('scOff').textContent=Math.abs(m)<15?'on time':(m<0?Math.abs(m)+' ms early':m+' ms late')}$('oled').textContent=pct>=80?'PASS '+pct+'%':'LOOP '+pct+'%';if(pct>=80&&ladOn()){const d=drill();if(run.src==='int'){if(run.bpm<d.bpm){run.bpm=Math.min(d.bpm,run.bpm+5);run.sp=60/run.bpm/4;run.win=winFor(Object.assign({},d,{bpm:run.bpm}));$('winTxt').textContent=Math.round(run.win.tight);S.lad=S.lad||{};S.lad[S.day]=run.bpm;save();$('bpm').value=run.bpm;$('srcInfo').textContent='Loop: app, '+run.bpm+' BPM';$('oled').textContent='PASS: UP TO '+run.bpm;ladShow()}else $('oled').textContent='TARGET PASSED '+pct+'%'}else{const cur=ext.iv.length?Math.round(60000/(ext.iv.reduce((a,b)=>a+b,0)/ext.iv.length*24)):0;if(cur&&cur<d.bpm)$('oled').textContent='PASS: SET CIRCUIT TO '+Math.min(d.bpm,cur+5)}}};
+setInterval(finalize,30);
+const startInt=()=>{const d=drill(),c=A(),bpm=+$('bpm').value||d.bpm,sp=60/bpm/4,L=d.bars*16;run={src:'int',bpm,sp,inst:[],loopEv:{},loopSc:{},loopDone:{},offs:[],wrong:0,win:winFor(Object.assign({},d,{bpm})),bar:-1,active:true,g:0,next:c.currentTime+.15,timer:0};$('winTxt').textContent=Math.round(run.win.tight);played.length=0;scrollToNotes(d.ev[0][1]);const lead=16;const sched=()=>{while(run&&run.next<c.currentTime+.12){const g=run.g,t=run.next;if(g<lead){if(g%4===0)click(t,g===0);const cd=4-Math.floor(g/4);setTimeout(()=>{if(run)$('oled').textContent='COUNT '+cd},Math.max(0,(t-c.currentTime)*1000))}else{const s=(g-lead)%L,loop=Math.floor((g-lead)/L);if(S.set.drums){if(s%4===0)kick(t);if(s%4===2)hat(t)}else if(s%4===0)click(t,s%16===0);const ev=evAt(s);if(ev)addInst(ev,perfAt(t)+outLat()+S.set.lat,loop);setTimeout(()=>{if(run&&run.src==='int')tickUI(s)},Math.max(0,(t-c.currentTime)*1000))}run.g++;run.next+=run.sp}};run.timer=setInterval(sched,25);sched();$('go').textContent='Stop';$('srcInfo').textContent='Loop: app, '+bpm+' BPM'};
+const stop=()=>{if(run&&run.timer)clearInterval(run.timer);run=null;$('go').textContent='Start loop';$('wait').textContent='Wait mode';$('oled').textContent='READY';showTarget(evAt(0),null);renderSteps(0)};
+$('go').onclick=()=>{if(run&&run.src==='int'){stop();return}if(ext.on){$('oled').textContent='PRESS PLAY ON CIRCUIT';return}if(run)stop();startInt();timers.drill.start()};
+$('demo').onclick=()=>{const d=drill(),c=A(),bpm=+$('bpm').value||d.bpm,sp=60/bpm/4,t0=c.currentTime+.1;d.ev.forEach(e=>e[1].forEach(n=>tone(n,t0+e[0]*sp,Math.min(.5,sp*3))))};
+
+/* wait mode */
+const showWait=()=>{const ev=drill().ev[run.idx];tickUI(ev[0]);scrollToNotes(ev[1])};
+const startWait=()=>{stop();run={src:'wait',idx:0,got:new Set(),loops:0,clean:0,miss:false,wrong:0,bar:-1,active:false,inst:[]};played.length=0;showWait();$('wait').textContent='Stop wait mode';$('oled').textContent='WAIT: PLAY LIT KEYS';$('srcInfo').textContent='Wait mode: no timing';$('scWrong').textContent='0'};
+const waitNote=n=>{const d=drill(),ev=d.ev[run.idx],req=ev[1],m=req.find(r=>pcOk(r,n));if(m===undefined){run.wrong++;run.miss=true;$('scWrong').textContent=run.wrong;flash(n,'k-m');return}run.got.add(m);flash(n,'k-h');if(!req.every(r=>run.got.has(r)))return;if(!run.miss)run.clean++;run.got=new Set();run.miss=false;run.idx++;if(run.idx>=d.ev.length){run.idx=0;run.loops++;const pct=Math.round(100*run.clean/d.ev.length);run.clean=0;$('scLast').textContent=pct+'%';$('scBar').style.width=pct+'%';$('oled').textContent=pct>=80?'CLEAN '+pct+'%: TRY THE LOOP':'ROUND '+run.loops+': '+pct+'% CLEAN'}showWait()};
+$('wait').onclick=()=>{if(run&&run.src==='wait'){stop();return}startWait();timers.drill.start()};
+/* external clock (Circuit over USB) */
+const ext={on:false,ticks:0,last:0,iv:[],running:false};
+const onClock=(b,t)=>{if(b===0xFA){ext.running=true;ext.ticks=0;const d=drill();run={src:'ext',inst:[],loopEv:{},loopSc:{},loopDone:{},offs:[],wrong:0,win:winFor(d),bar:-1,active:true};played.length=0;$('srcInfo').textContent='Loop: Circuit clock (loop 1 is warm-up)';timers.drill.start();return}if(b===0xFC){ext.running=false;if(run&&run.src==='ext')stop();return}if(b!==0xF8)return;if(!ext.on){ext.on=true;$('clockState').textContent='Circuit clock detected. Press Play on the Circuit to start a drill.'}if(ext.last){ext.iv.push(t-ext.last);if(ext.iv.length>48)ext.iv.shift()}ext.last=t;if(!ext.running||!run||run.src!=='ext')return;const tk=ext.ticks++;if(tk%6===0){const d=drill(),L=d.bars*16,st=tk/6,s=st%L,loop=Math.floor(st/L);const ev=evAt(s);if(ev)addInst(ev,t+S.set.lat,loop);tickUI(s);if(ext.iv.length>12){const bpm=Math.round(60000/(ext.iv.reduce((a,b)=>a+b,0)/ext.iv.length*24));$('srcInfo').textContent='Loop: Circuit clock, '+bpm+' BPM'}}};
+setInterval(()=>{if(ext.on&&performance.now()-ext.last>1500){ext.on=false;ext.running=false;$('clockState').textContent='No external clock. The app plays its own loop.'}},700);
+
+/* note input */
+let ear=null,cal=null;
+const noteOn=(n,t,src)=>{if((src==='tap'&&S.set.tapSnd)||(src==='midi'&&S.set.midiSnd))tone(n,A().currentTime,.35,.22);played.push({n,t,used:false});if(cal)cal.taps.push(t);if(run&&run.src==='wait')waitNote(n);if(ear&&ear.mode==='d'&&!ear.answered)answerEar(((n-ear.root)%12+12)%12,true);if(!run){flash(n,'k-p')}};
+
+/* MIDI */
+let midi=null;
+const fillSel=()=>{if(!midi)return;const ins=[...midi.inputs.values()];const opt=(sel,pref)=>{const cur=$(sel).value;$(sel).innerHTML='<option value="">None</option>'+ins.map(i=>`<option value="${i.id}">${i.name.replace(/</g,'')}</option>`).join('');const p=ins.find(i=>i.id===cur)||ins.find(i=>pref.test(i.name));$(sel).value=p?p.id:''};opt('selNotes',/keystep/i);opt('selClock',/circuit/i);if(!$('selNotes').value&&ins[0]&&!/circuit/i.test(ins[0].name))$('selNotes').value=ins[0].id;bind();$('midiState').textContent=ins.length?'Connected: '+ins.map(i=>i.name).join(', ')+'.':'MIDI allowed, but no device found. Check the USB cable.'};
+const bind=()=>{for(const i of midi.inputs.values())i.onmidimessage=e=>{const [b,n,v]=e.data,isN=i.id===$('selNotes').value,isC=i.id===$('selClock').value;if(b>=0xF8||b===0xFA||b===0xFC){if(isC)onClock(b,e.timeStamp);return}if(!isN)return;if((b&0xF0)===0x90&&v>0)noteOn(n,e.timeStamp,'midi')}};
+$('midiGo').onclick=async()=>{if(!navigator.requestMIDIAccess){$('midiState').textContent='This browser has no Web MIDI. Use Chrome on the MacBook or the Pixel.';return}try{midi=await navigator.requestMIDIAccess({sysex:false});midi.onstatechange=fillSel;fillSel()}catch(e){$('midiState').textContent='MIDI was blocked. Tap the icon left of the web address, open Permissions or Site settings, set MIDI to Allow, then reload.'}};
+$('selNotes').onchange=$('selClock').onchange=()=>midi&&bind();
+
+/* calibration */
+$('calGo').onclick=()=>{const c=A(),sp=60/90,t0=c.currentTime+.3;cal={taps:[],exp:[]};for(let i=0;i<12;i++){click(t0+i*sp,i%4===0);cal.exp.push(perfAt(t0+i*sp)+outLat())}$('calMsg').textContent='Tap along...';setTimeout(()=>{const ds=[];cal.exp.slice(3).forEach(x=>{let b=null;cal.taps.forEach(t=>{if(Math.abs(t-x)<250&&(b===null||Math.abs(t-x)<Math.abs(b)))b=t-x});if(b!==null)ds.push(b)});cal=null;if(ds.length<5){$('calMsg').textContent='Not enough taps. Try again.';return}ds.sort((a,b)=>a-b);const m=Math.round(ds[Math.floor(ds.length/2)]);S.set.lat=Math.round(m/5)*5;$('lat').value=S.set.lat;save();$('calMsg').textContent='Set to '+S.set.lat+' ms.'},12*sp*1000+900)};
+
+/* ear training */
+const EARQ={q:()=>{const r=55+Math.floor(Math.random()*10),maj=Math.random()<.5;return{mode:'q',notes:[[r,r+(maj?4:3),r+7]],ans:maj?'Major':'Minor',opts:['Major','Minor']}},
+ i:()=>{const r=55+Math.floor(Math.random()*10),ivs=[['Minor 3rd',3],['Major 3rd',4],['Perfect 5th',7],['Octave',12]],p=ivs[Math.floor(Math.random()*ivs.length)];return{mode:'i',notes:[[r],[r+p[1]]],ans:p[0],opts:ivs.map(x=>x[0])}},
+ d:()=>{const cm=S.day>=10,root=cm?60:57,sc=[0,2,3,5,7,8,10],k=Math.floor(Math.random()*7);return{mode:'d',root,notes:[[root,root+3,root+7],[root+sc[k]]],ans:String(k+1),opts:['1','2','3','4','5','6','7'],deg:sc,key:cm?'C minor':'A minor'}}};
+const newEar=()=>{let m=drill().ear;if(m==='m')m=['q','i','d'][Math.floor(Math.random()*3)];ear=EARQ[m]();ear.answered=false;$('earAns').innerHTML=ear.opts.map(o=>`<button class="ans" data-a="${o}">${o}</button>`).join('');$('earMsg').textContent=ear.mode==='d'?'Key: '+ear.key+'.':''};
+const playEar=()=>{if(!ear)return;const c=A(),t=c.currentTime+.1;ear.notes.forEach((g,i)=>g.forEach(n=>tone(n,t+i*.9,.8,.2)))};
+const answerEar=(a,byKey)=>{if(!ear||ear.answered)return;let ok;if(byKey){const k=ear.deg.indexOf(a);ok=k>=0&&String(k+1)===ear.ans;if(k<0){$('earMsg').textContent='That note is outside '+ear.key+'. Try again.';return}a=String(k+1)}else ok=a===ear.ans;ear.answered=true;const pr=P(S.day);pr.ear[1]++;if(ok)pr.ear[0]++;save();$('earSc').textContent=pr.ear[0]+'/'+pr.ear[1];document.querySelectorAll('#earAns .ans').forEach(b=>{if(b.dataset.a===ear.ans)b.classList.add('right');else if(b.dataset.a===a)b.classList.add('wrong')});$('earMsg').textContent=ok?'Right. Next question loading.':'It was '+ear.ans+'. Listen again, then next.';setTimeout(()=>{newEar();playEar()},ok?1100:2200)};
+$('earAns').onclick=e=>{const b=e.target.closest('.ans');if(b)answerEar(b.dataset.a,false)};
+$('earPlay').onclick=()=>{timers.ear.start();if(!ear||ear.answered)newEar();playEar()};
+$('earAgain').onclick=playEar;
+
+/* timers */
+const mkTimer=(id,sec)=>{let left=sec,iv=0;const show=()=>{$(id).textContent=Math.floor(left/60)+':'+String(left%60).padStart(2,'0');$(id).classList.toggle('done',left===0)};return{start(){if(iv||left===0)return;iv=setInterval(()=>{left=Math.max(0,left-1);show();if(!left){clearInterval(iv);iv=0}},1000)},reset(){clearInterval(iv);iv=0;left=sec;show()}}};
+const timers={drill:mkTimer('tmDrill',600),ear:mkTimer('tmEar',300),th:mkTimer('tmTh',300),ft:mkTimer('tmFt',600)};
+
+/* render */
+const streak=()=>{let n=0;const d=new Date();if(!S.log[today()])d.setDate(d.getDate()-1);for(;;){const k=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');if(S.log[k]){n++;d.setDate(d.getDate()-1)}else break}return n};
+const renderDays=()=>{$('days').innerHTML=D.map((d,i)=>{const p=S.p[i+1]||{};return`<button class="day" data-d="${i+1}" aria-current="${S.day===i+1}" aria-label="Day ${i+1}">${code(i+1)}<i class="a${p.a?' on':''}"></i><i class="b${p.b?' on':''}"></i></button>`}).join('');const a=Object.values(S.p).filter(p=>p.a).length,b=Object.values(S.p).filter(p=>p.b).length;$('stA').textContent=a+'/14';$('stB').textContent=b+'/14';$('stStreak').textContent=streak()};
+const renderA=()=>{const d=drill(),p=P(S.day),it=INTRO[S.day-1];$('intro').innerHTML=`<div><b>Today</b>${it[0]}</div><div><b>Why it matters</b>${it[1]}</div>`+(it[2]?`<div><b>Listen for</b>${it[2]}</div>`:'');$('dayTitle').innerHTML='<b>'+code(S.day)+'</b> &nbsp;Weeks 1-2, day '+S.day+' of 14';$('drCode').textContent=code(S.day);$('drName').textContent=d.t;$('drMeta').innerHTML=[['Key',KEY(S.day)],['Target',d.bpm+' BPM'],['Bars',d.bars],['Hand','Right'],['Type',d.ev[0][1].length>1?'Chords':'Single notes'],['Goal',GOAL[S.day-1]]].map(x=>'<span>'+x[0]+' <b>'+x[1]+'</b></span>').join('');$('drHow').textContent=d.how+' New shape? Start in Wait mode, then the loop.';$('bpm').value=ladOn()?ladBpm():d.bpm;ladShow();$('earHow').textContent=EAR[d.ear];$('earSc').textContent=p.ear[0]+'/'+p.ear[1];const key=today()+':'+S.day;$('scBest').textContent=S.best[key]?S.best[key]+'%':'-';$('scLast').textContent='-';$('scOff').textContent='-';$('scWrong').textContent='0';$('scBar').style.width='0';$('doneAMsg').classList.toggle('hide',!p.a);$('doneA').textContent=p.a?'Part A done':'Mark Part A done';renderSteps(0);showTarget(d.ev[0],null);setTimeout(()=>scrollToNotes(d.ev[0][1]),50);ear=null;$('earAns').innerHTML='';$('earMsg').textContent='';timers.drill.reset();timers.ear.reset()};
+const renderB=()=>{const th=THEORY[S.day-1],ft=FEAT[S.day-1],p=P(S.day);$('thTitle').textContent='Theory: '+th[0];$('thBody').innerHTML=th[1];$('thQuiz').innerHTML=th[2].map((q,qi)=>`<p style="margin-top:14px"><b>${q[0]}</b></p><div class="row" data-q="${qi}">${q[1].map((o,oi)=>`<button class="ans${p.quiz[qi]!==undefined?(oi===q[2]?' right':(oi===p.quiz[qi]?' wrong':'')):''}" data-o="${oi}">${o}</button>`).join('')}</div>`).join('');$('ftTitle').textContent='Feature: '+ft[0];$('ftSteps').innerHTML=ft[1].map((s,i)=>`<li><input type="checkbox" id="fs${i}" data-i="${i}"${p.steps[i]?' checked':''}><label for="fs${i}">${s}</label></li>`).join('');$('doneBMsg').classList.toggle('hide',!p.b);$('doneB').textContent=p.b?'Part B done':'Mark Part B done';timers.th.reset();timers.ft.reset()};
+const renderSet=()=>{$('lat').value=S.set.lat;$('optLadder').checked=ladOn();$('optExact').checked=S.set.exact;$('optDrums').checked=S.set.drums;$('optMidiSnd').checked=S.set.midiSnd;$('optTapSnd').checked=S.set.tapSnd};
+const renderAll=()=>{renderDays();renderA();renderB();renderSet()};
+$('thQuiz').onclick=e=>{const b=e.target.closest('.ans');if(!b)return;const qi=+b.parentNode.dataset.q,oi=+b.dataset.o,p=P(S.day);if(p.quiz[qi]!==undefined)return;p.quiz[qi]=oi;timers.th.start();save();renderB()};
+$('ftSteps').onchange=e=>{const i=+e.target.dataset.i,p=P(S.day);p.steps[i]=e.target.checked;timers.ft.start();save()};
+$('days').onclick=e=>{const b=e.target.closest('.day');if(!b)return;stop();S.day=+b.dataset.d;save();renderAll()};
+$('doneA').onclick=()=>{const p=P(S.day);p.a=true;S.log[today()]=true;save();renderDays();$('doneAMsg').classList.remove('hide');$('doneA').textContent='Part A done'};
+$('doneB').onclick=()=>{const p=P(S.day);p.b=true;save();renderDays();$('doneBMsg').classList.remove('hide');$('doneB').textContent='Part B done'};
+const tabs=['A','B','S'];tabs.forEach(t=>$('tab'+t).onclick=()=>{tabs.forEach(u=>{$('tab'+u).setAttribute('aria-selected',u===t);$('p'+u).classList.toggle('hide',u!==t)});$('intro').classList.toggle('hide',t==='S');if(t!=='A')stop()});
+$('bpm').onchange=()=>{const v=+$('bpm').value;if(v>=40&&v<=160&&ladOn()){S.lad=S.lad||{};S.lad[S.day]=v;save();ladShow()}};
+$('lat').onchange=()=>{S.set.lat=+$('lat').value||0;save()};
+[['optLadder','ladder'],['optExact','exact'],['optDrums','drums'],['optMidiSnd','midiSnd'],['optTapSnd','tapSnd']].forEach(([id,k])=>$(id).onchange=()=>{S.set[k]=$(id).checked;save();if(k==='ladder'){$('bpm').value=ladOn()?ladBpm():drill().bpm;ladShow()}});
+$('expGo').onclick=async()=>{const c=btoa(unescape(encodeURIComponent(JSON.stringify(S))));$('code').value=c;try{await navigator.clipboard.writeText(c);$('codeMsg').textContent='Copied.'}catch(e){$('codeMsg').textContent='Select the code above and copy it.'}};
+$('impGo').onclick=()=>{try{const j=JSON.parse(decodeURIComponent(escape(atob($('code').value.trim()))));if(j.v!==1)throw 0;S=Object.assign(S,j);S.at=Date.now();save();renderAll();$('codeMsg').textContent='Loaded.'}catch(e){$('codeMsg').textContent='That code did not load.'}};
+if(!S.p[S.day]){const f=D.findIndex((d,i)=>!(S.p[i+1]&&S.p[i+1].a));S.day=f<0?14:f+1}
+const thmSet=t=>{document.documentElement.dataset.theme=t;$('thmTxt').textContent=t==='dark'?'Light':'Dark';try{localStorage.setItem('keys-theme',t)}catch(e){}};
+thmSet(document.documentElement.dataset.theme||'dark');
+$('thm').onclick=()=>thmSet(document.documentElement.dataset.theme==='dark'?'light':'dark');
+renderAll();
+if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
+</script>
+</body>
+</html>
