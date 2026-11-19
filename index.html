@@ -127,7 +127,7 @@ ol.steps2 input{width:22px;height:22px;margin:2px 0 0 4px;accent-color:var(--pur
 :root[data-theme=dark] .flag{color:var(--vio)}
 @media(prefers-color-scheme:dark){:root:not([data-theme=light]) .flag{color:var(--vio)}}
 label.opt{display:flex;gap:10px;align-items:center;min-height:44px}
-select,input[type=number]{font:16px "Albert Sans",system-ui;min-height:44px;padding:0 10px;border:2px solid var(--ink);border-radius:0;background:var(--bg);color:var(--ink);max-width:100%}
+select,input[type=number],input[type=text]{font:16px "Albert Sans",system-ui;min-height:44px;padding:0 10px;border:2px solid var(--ink);border-radius:0;background:var(--bg);color:var(--ink);max-width:100%}
 textarea{width:100%;font:13px/1.4 ui-monospace,Menlo,monospace;min-height:70px;border:2px solid var(--ink);background:var(--bg);color:var(--ink);padding:8px}
 .theory p{max-width:68ch}
 .pill{display:inline-block;padding:3px 10px;background:var(--pur);color:#fff;font-size:13px;font-weight:700}
@@ -148,6 +148,22 @@ label.knob{display:grid;gap:2px;font-size:12px;font-weight:700;color:#fff}
 label.knob span{font-weight:400;font-variant-numeric:tabular-nums;color:color-mix(in srgb,#fff 78%,var(--pur))}
 input[type=range]{width:100%;height:34px;accent-color:var(--yel)}
 @media(max-width:600px){.tab{white-space:nowrap;font-size:14px;padding:0 6px;gap:5px}.pgrid{grid-template-columns:repeat(2,minmax(0,1fr))}.knobs{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.disp{display:flex;gap:10px;align-items:stretch}
+.disp .oled{flex:1}
+.strobe{flex:none;width:64px;display:grid;justify-items:center;gap:2px;font-size:11px;font-weight:700;color:#fff}
+.strobe svg{width:48px;height:48px}
+.spec span{display:inline-flex;align-items:center;gap:6px}
+.spec svg.ic{width:15px;height:15px;opacity:.85}
+.intro b{display:flex!important;align-items:center;gap:6px}
+.intro b svg.ic{width:15px;height:15px}
+.thm span{white-space:nowrap}
+.cat{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:14px;margin:14px 0}
+.slv{border:0;padding:0;background:none;cursor:pointer;text-align:left;color:var(--ink);font:inherit}
+.slv svg{display:block;width:100%;height:auto;box-shadow:0 2px 0 rgba(0,0,0,.25)}
+.slv small{display:block;font-size:12px;margin-top:6px;color:var(--mute)}
+.slv[aria-pressed=true] svg{outline:3px solid var(--yel);outline-offset:2px}
+.credits{border-top:1px solid var(--hair);padding-top:10px;font-size:15px;max-width:68ch;font-variant-numeric:tabular-nums}
+@media(max-width:600px){.cat{grid-template-columns:repeat(2,minmax(0,1fr))}.thm span{display:none}.stat{width:100%;justify-content:space-between;gap:10px}.thm{padding:0 10px;min-width:44px;justify-content:center}.stat b{font-size:22px}}
 .tag{margin-top:24px;padding-top:8px;border-top:1px solid var(--hair);font-size:13px;color:var(--mute);text-align:right}
 @media(max-width:600px){.tier{padding:16px 14px 14px}.lower{padding:16px 10px 0}.kb{height:120px;border-left-width:10px;border-right-width:10px}.wrap{padding-top:10px}.st{height:24px;font-size:10px}.steps{gap:2px}.tabs{width:100%}.tab{flex:1;justify-content:center;padding:0 8px}}
 @media(prefers-reduced-motion:reduce){.meter span{transition:none}}
@@ -161,6 +177,7 @@ input[type=range]{width:100%;height:34px;accent-color:var(--yel)}
       <div class="sub" id="dayTitle">Day 1</div>
     </div>
     <div class="stat">
+      <button class="btn ghost thm" id="tabC" aria-selected="false"><svg class="ic" viewBox="0 0 18 18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="11" height="11"/><path d="M5 2.5h10.5V13"/><circle cx="7.5" cy="10.5" r="2"/></svg><span>Catalogue</span></button>
       <button class="btn ghost thm" id="thm" aria-label="Switch light or dark mode"><svg class="ic" viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9 2a7 7 0 0 1 0 14z" fill="currentColor"/></svg><span id="thmTxt">Light</span></button>
       <div><b id="stStreak">0</b>day streak</div>
       <div><b id="stA">0/14</b>Part A done</div>
@@ -174,7 +191,7 @@ input[type=range]{width:100%;height:34px;accent-color:var(--yel)}
     <button class="tab" role="tab" id="tabA" aria-selected="true"><svg class="ic" viewBox="0 0 18 18" aria-hidden="true"><rect x="1" y="3" width="16" height="12" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5 3v7M9 3v7M13 3v7" stroke="currentColor" stroke-width="2"/></svg>A: play</button>
     <button class="tab" role="tab" id="tabB" aria-selected="false"><svg class="ic" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 4h14M2 9h14M2 14h9" stroke="currentColor" stroke-width="2.5"/></svg>B: learn</button>
     <button class="tab" role="tab" id="tabN" aria-selected="false"><svg class="ic" viewBox="0 0 18 18" aria-hidden="true"><path d="M1 9h3l2-6 3 12 3-9 2 3h3" fill="none" stroke="currentColor" stroke-width="2"/></svg>Sounds</button>
-    <button class="tab" role="tab" id="tabS" aria-selected="false"><svg class="ic" viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9 9V3" stroke="currentColor" stroke-width="2.5"/></svg>Setup</button>
+    <button class="tab" role="tab" id="tabS" aria-selected="false"><svg class="ic" viewBox="0 0 18 18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="9" r="5.2"/><circle cx="9" cy="9" r="1.8"/><path d="M9 1v2.6M9 14.4V17M1 9h2.6M14.4 9H17M3.3 3.3l1.9 1.9M12.8 12.8l1.9 1.9M3.3 14.7l1.9-1.9M12.8 5.2l1.9-1.9" stroke-width="2.2"/></svg>Setup</button>
   </div>
 
   <!-- PART A -->
@@ -183,7 +200,7 @@ input[type=range]{width:100%;height:34px;accent-color:var(--yel)}
       <div class="tier" id="tier" style="position:relative"><i class="screw s1"></i><i class="screw s2"></i>
       <div class="devhead">
         <div><div class="code" id="drCode">KYS001</div><h2 id="drName">Drill</h2><div class="spec" id="drMeta"></div></div>
-        <div><div class="brk">Display</div><div class="oled" id="oled">READY</div><button class="chip" id="midiChip">Connect KeyStep</button><button class="chip" id="sndLine">Sound: Keys</button></div>
+        <div><div class="brk">Display</div><div class="disp"><div class="oled" id="oled">READY</div><div class="strobe" title="Timing"><svg id="strobe" viewBox="0 0 60 60" aria-hidden="true"></svg><span id="strobeTxt">timing</span></div></div><button class="chip" id="midiChip">Connect KeyStep</button><button class="chip" id="sndLine">Sound: Keys</button></div>
       </div>
       <div class="mod"><div class="brk">Step sequencer</div>
       <div class="steps" id="steps"></div>
@@ -200,7 +217,7 @@ input[type=range]{width:100%;height:34px;accent-color:var(--yel)}
           <div class="row" style="margin-top:10px">
             <button class="btn org" id="go">Start loop</button>
             <label class="opt" for="bpm" style="min-height:44px">BPM <input type="number" id="bpm" min="40" max="160" style="width:5.5em"></label>
-            <button class="btn ghost" id="demo">Hear it</button>
+            <button class="btn ghost" id="demo" style="display:inline-flex;align-items:center;gap:8px"><svg class="ic" viewBox="0 0 18 18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><path d="M2.5 7h3l4-3.5v11l-4-3.5h-3z"/><path d="M12.5 6a4 4 0 0 1 0 6M14.5 4a7 7 0 0 1 0 10"/></svg>Hear it</button>
             <button class="btn ghost" id="wait">Wait mode</button>
           </div>
           <div class="score">
@@ -219,7 +236,7 @@ input[type=range]{width:100%;height:34px;accent-color:var(--yel)}
           <div class="tline"><h3><svg class="ic" viewBox="0 0 18 18" aria-hidden="true"><path d="M3 9h2M7 5v8M11 2v14M15 6v6" stroke="currentColor" stroke-width="2.5"/></svg>Ear training, 5 min</h3><span class="timer" id="tmEar">5:00</span></div>
           <p id="earHow"></p>
           <p class="note bg" id="earInfo"></p>
-          <div class="row"><button class="btn" id="earPlay">Play question</button><button class="btn ghost" id="earAgain">Again</button></div>
+          <div class="row"><button class="btn" id="earPlay" style="display:inline-flex;align-items:center;gap:8px"><svg class="ic" viewBox="0 0 18 18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><path d="M2.5 7h3l4-3.5v11l-4-3.5h-3z"/><path d="M12.5 6a4 4 0 0 1 0 6M14.5 4a7 7 0 0 1 0 10"/></svg>Play question</button><button class="btn ghost" id="earAgain">Again</button></div>
           <div class="row" id="earAns" style="margin-top:10px"></div>
           <p id="earMsg" class="note"></p>
           <div class="score"><div><b id="earSc">0/0</b>today</div></div>
@@ -244,7 +261,7 @@ input[type=range]{width:100%;height:34px;accent-color:var(--yel)}
         <div id="thQuiz"></div>
       </div>
       <div class="card">
-        <div class="tline"><h3><svg class="ic" viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9 9V3" stroke="currentColor" stroke-width="2.5"/></svg><span id="ftTitle">Feature</span></h3><span class="timer" id="tmFt">10:00</span></div>
+        <div class="tline"><h3><svg class="ic" viewBox="0 0 18 18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="9" r="5.2"/><circle cx="9" cy="9" r="1.8"/><path d="M9 1v2.6M9 14.4V17M1 9h2.6M14.4 9H17M3.3 3.3l1.9 1.9M12.8 12.8l1.9 1.9M3.3 14.7l1.9-1.9M12.8 5.2l1.9-1.9" stroke-width="2.2"/></svg><span id="ftTitle">Feature</span></h3><span class="timer" id="tmFt">10:00</span></div>
         <ol class="steps2" id="ftSteps"></ol>
         <p class="note">Steps marked "check on the unit" are not yet confirmed from Arturia or Novation docs.</p>
         <button class="btn org" id="doneB">Mark Part B done</button>
@@ -252,6 +269,15 @@ input[type=range]{width:100%;height:34px;accent-color:var(--yel)}
       </div>
     </div>
     <div class="tag">Reading screen.</div>
+  </section>
+
+  <!-- CATALOGUE -->
+  <section id="pC" class="hide">
+    <div class="tline" style="border-top:3px solid var(--line);padding-top:12px"><h2 style="display:flex;align-items:center;gap:10px"><svg class="ic" viewBox="0 0 18 18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="11" height="11"/><path d="M5 2.5h10.5V13"/><circle cx="7.5" cy="10.5" r="2"/></svg>Catalogue</h2><span class="note" id="catCount"></span></div>
+    <p class="note">Every finished Part A presses a record. Its sleeve is drawn from how you played it: the notes, the tempo you reached and your best loop. Unfinished lessons wait as white labels.</p>
+    <div class="cat" id="cat"></div>
+    <div class="credits" id="catInfo">Tap a sleeve for its credits.</div>
+    <div class="tag">Catalogue screen.</div>
   </section>
 
   <!-- SOUNDS -->
@@ -324,6 +350,7 @@ input[type=range]{width:100%;height:34px;accent-color:var(--yel)}
         </div>
         <div class="card">
           <h3>Progress</h3>
+          <label class="opt" for="nameIn">Name for credits <input type="text" id="nameIn" maxlength="30" style="width:12em" placeholder="Alex"></label>
           <p class="sync" id="syncMsg">Saving on this device.</p>
           <div class="row" id="authRow"><button class="btn org hide" id="authIn">Sign in with Google to sync</button><button class="btn ghost hide" id="authOut">Sign out</button><span class="note" id="authWho"></span></div>
           <div class="row"><button class="btn ghost" id="expGo">Copy progress code</button><button class="btn ghost" id="impGo">Load code</button></div>
@@ -388,6 +415,7 @@ const BG=['The keyboard repeats the same 12-note pattern in every octave, which 
 const EARINFO={q:'A triad has three notes: root, third and fifth. In a major triad the third is 4 semitones above the root; in a minor triad it is 3. That one-semitone difference is why major sounds bright and settled and minor darker. The root and fifth are the same in both, so listen to the middle note.',
  i:'An interval is the distance between two notes, counted in semitones. Minor 3rd (3) and major 3rd (4) build chords; the perfect 5th (7) sounds open and stable and anchors many basslines; the octave (12) is the same note higher. Hearing them lets you work out riffs by ear.',
  d:'Scale degrees number the notes of a key from the home note (1) to 7. Against the home chord each has a role: 1 feels at rest, 5 is stable, 3 sets the mood, and 2, 4, 6 and 7 want to move. This is how you work out a hook or bassline in your track\'s key.'};
+const IC={"cog": "<svg class=\"ic\" viewBox=\"0 0 18 18\" aria-hidden=\"true\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"9\" cy=\"9\" r=\"5.2\"/><circle cx=\"9\" cy=\"9\" r=\"1.8\"/><path d=\"M9 1v2.6M9 14.4V17M1 9h2.6M14.4 9H17M3.3 3.3l1.9 1.9M12.8 12.8l1.9 1.9M3.3 14.7l1.9-1.9M12.8 5.2l1.9-1.9\" stroke-width=\"2.2\"/></svg>", "note": "<svg class=\"ic\" viewBox=\"0 0 18 18\" aria-hidden=\"true\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"6\" cy=\"13\" r=\"3\"/><path d=\"M9 13V2l5 2\"/></svg>", "bpm": "<svg class=\"ic\" viewBox=\"0 0 18 18\" aria-hidden=\"true\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M5 16h8L10.5 2h-3z\"/><path d=\"M9 12l4.5-6.5\"/></svg>", "bars": "<svg class=\"ic\" viewBox=\"0 0 18 18\" aria-hidden=\"true\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M2 4v10M6.7 4v10M11.3 4v10M16 4v10\"/></svg>", "hand": "<svg class=\"ic\" viewBox=\"0 0 18 18\" aria-hidden=\"true\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M4 16V8M7.3 16V3M10.6 16V3.5M14 16V6.5M4 16h10\"/></svg>", "chord": "<svg class=\"ic\" viewBox=\"0 0 18 18\" aria-hidden=\"true\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"9\" cy=\"3.5\" r=\"2\" fill=\"currentColor\" stroke=\"none\"/><circle cx=\"9\" cy=\"9\" r=\"2\" fill=\"currentColor\" stroke=\"none\"/><circle cx=\"9\" cy=\"14.5\" r=\"2\" fill=\"currentColor\" stroke=\"none\"/></svg>", "single": "<svg class=\"ic\" viewBox=\"0 0 18 18\" aria-hidden=\"true\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"9\" cy=\"9\" r=\"2.6\" fill=\"currentColor\" stroke=\"none\"/></svg>", "goal": "<svg class=\"ic\" viewBox=\"0 0 18 18\" aria-hidden=\"true\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"9\" cy=\"9\" r=\"7\"/><circle cx=\"9\" cy=\"9\" r=\"2.6\"/></svg>", "today": "<svg class=\"ic\" viewBox=\"0 0 18 18\" aria-hidden=\"true\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><rect x=\"2\" y=\"3.5\" width=\"14\" height=\"12.5\"/><path d=\"M2 7.5h14M6 1.5v3M12 1.5v3\"/></svg>", "why": "<svg class=\"ic\" viewBox=\"0 0 18 18\" aria-hidden=\"true\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M2 9h12M10 5l4 4-4 4\"/></svg>", "listen": "<svg class=\"ic\" viewBox=\"0 0 18 18\" aria-hidden=\"true\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M3 13V9a6 6 0 0 1 12 0v4\"/><rect x=\"2\" y=\"11\" width=\"3\" height=\"5\"/><rect x=\"13\" y=\"11\" width=\"3\" height=\"5\"/></svg>", "speaker": "<svg class=\"ic\" viewBox=\"0 0 18 18\" aria-hidden=\"true\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M2.5 7h3l4-3.5v11l-4-3.5h-3z\"/><path d=\"M12.5 6a4 4 0 0 1 0 6M14.5 4a7 7 0 0 1 0 10\"/></svg>", "cat": "<svg class=\"ic\" viewBox=\"0 0 18 18\" aria-hidden=\"true\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><rect x=\"2\" y=\"5\" width=\"11\" height=\"11\"/><path d=\"M5 2.5h10.5V13\"/><circle cx=\"7.5\" cy=\"10.5\" r=\"2\"/></svg>", "timing": "<svg class=\"ic\" viewBox=\"0 0 18 18\" aria-hidden=\"true\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"9\" cy=\"9\" r=\"7\" stroke-dasharray=\"2 2.4\"/><circle cx=\"9\" cy=\"9\" r=\"1.6\" fill=\"currentColor\" stroke=\"none\"/></svg>"};
 const KEY=d=>d<=7?'A minor':(d===13?'A minor, C minor':'C minor');
 const GOAL=['2','1, 2','2','1','1','1','1','1','2','1','1','1','1','1, 2'];
 const code=d=>'KYS'+String(d).padStart(3,'0');
@@ -496,11 +524,11 @@ const nextEvAfter=s=>{const d=drill(),L=d.bars*16;let best=null,bd=1e9;d.ev.forE
 const winFor=d=>{const g=[];for(let i=1;i<d.ev.length;i++)g.push(d.ev[i][0]-d.ev[i-1][0]);const minG=Math.min(16,...g.filter(x=>x>0));const ms=minG*60000/d.bpm/4;return{tight:Math.min(90,ms*.25),loose:Math.min(170,ms*.45)}};
 const tickUI=(loopStep)=>{const d=drill(),bar=Math.floor(loopStep/16);if(!run||run.bar!==bar){if(run)run.bar=bar;renderSteps(bar)}document.querySelectorAll('.st.now').forEach(e=>e.classList.remove('now'));const el=$('st'+(loopStep%16));if(el)el.classList.add('now');const ev=evAt(loopStep);showTarget(ev,nextEvAfter(loopStep))};
 const addInst=(ev,tExp,loop)=>{run.inst.push({ev,t:tExp,loop,done:false});run.loopEv[loop]=(run.loopEv[loop]||0)+1};
-const finalize=()=>{if(!run||run.src==='wait')return;const now=performance.now(),W=run.win;run.inst.forEach(I=>{if(I.done||now<I.t+W.loose)return;I.done=true;let maxd=0,found=0,sum=0;I.ev[1].forEach(req=>{let best=null,bd=1e9;played.forEach(p=>{if(p.used)return;const dt=p.t-I.t;if(Math.abs(dt)<=W.loose&&pcOk(req,p.n)&&Math.abs(dt)<bd){bd=Math.abs(dt);best=p}});if(best){best.used=true;found++;sum+=best.t-I.t;maxd=Math.max(maxd,Math.abs(best.t-I.t));flash(best.n,'k-h')}else flash(req,'k-m')});let sc=0;if(found===I.ev[1].length)sc=maxd<=W.tight?1:.5;else if(found>0)sc=.25*found/I.ev[1].length;if(found){run.offs.push(sum/found)}run.loopSc[I.loop]=(run.loopSc[I.loop]||0)+sc;run.loopDone[I.loop]=(run.loopDone[I.loop]||0)+1;if(run.loopDone[I.loop]===drill().ev.length)loopEnd(I.loop)});run.inst=run.inst.filter(I=>!I.done);for(let i=played.length-1;i>=0;i--){const p=played[i];if(now-p.t>W.loose+400){if(!p.used&&run.active){run.wrong++;$('scWrong').textContent=run.wrong}played.splice(i,1)}}};
+const finalize=()=>{if(!run||run.src==='wait')return;const now=performance.now(),W=run.win;run.inst.forEach(I=>{if(I.done||now<I.t+W.loose)return;I.done=true;let maxd=0,found=0,sum=0;I.ev[1].forEach(req=>{let best=null,bd=1e9;played.forEach(p=>{if(p.used)return;const dt=p.t-I.t;if(Math.abs(dt)<=W.loose&&pcOk(req,p.n)&&Math.abs(dt)<bd){bd=Math.abs(dt);best=p}});if(best){best.used=true;found++;sum+=best.t-I.t;maxd=Math.max(maxd,Math.abs(best.t-I.t));flash(best.n,'k-h')}else flash(req,'k-m')});let sc=0;if(found===I.ev[1].length)sc=maxd<=W.tight?1:.5;else if(found>0)sc=.25*found/I.ev[1].length;if(found){run.offs.push(sum/found);strobeUpd(run.offs)}run.loopSc[I.loop]=(run.loopSc[I.loop]||0)+sc;run.loopDone[I.loop]=(run.loopDone[I.loop]||0)+1;if(run.loopDone[I.loop]===drill().ev.length)loopEnd(I.loop)});run.inst=run.inst.filter(I=>!I.done);for(let i=played.length-1;i>=0;i--){const p=played[i];if(now-p.t>W.loose+400){if(!p.used&&run.active){run.wrong++;$('scWrong').textContent=run.wrong}played.splice(i,1)}}};
 const loopEnd=l=>{if(l===0&&run.src==='ext')return;const pct=Math.round(100*run.loopSc[l]/drill().ev.length);$('scLast').textContent=pct+'%';$('scBar').style.width=pct+'%';const key=today()+':'+S.day;const prev=S.best[key]||0;if(pct>prev){S.best[key]=pct;save()}$('scBest').textContent=(S.best[key]||0)+'%';const o=run.offs.slice(-12);if(o.length){const m=Math.round(o.reduce((a,b)=>a+b,0)/o.length);$('scOff').textContent=Math.abs(m)<15?'on time':(m<0?Math.abs(m)+' ms early':m+' ms late')}$('oled').textContent=pct>=80?'PASS '+pct+'%':'LOOP '+pct+'%';if(pct>=80&&ladOn()){const d=drill();if(run.src==='int'){if(run.bpm<d.bpm){run.bpm=Math.min(d.bpm,run.bpm+5);run.sp=60/run.bpm/4;run.win=winFor(Object.assign({},d,{bpm:run.bpm}));$('winTxt').textContent=Math.round(run.win.tight);S.lad=S.lad||{};S.lad[S.day]=run.bpm;save();$('bpm').value=run.bpm;$('srcInfo').textContent='Loop: app, '+run.bpm+' BPM';$('oled').textContent='PASS: UP TO '+run.bpm;ladShow()}else $('oled').textContent='TARGET PASSED '+pct+'%'}else{const cur=ext.iv.length?Math.round(60000/(ext.iv.reduce((a,b)=>a+b,0)/ext.iv.length*24)):0;if(cur&&cur<d.bpm)$('oled').textContent='PASS: SET CIRCUIT TO '+Math.min(d.bpm,cur+5)}}};
 setInterval(finalize,30);
 const startInt=()=>{const d=drill(),c=A(),bpm=+$('bpm').value||d.bpm,sp=60/bpm/4,L=d.bars*16;run={src:'int',bpm,sp,inst:[],loopEv:{},loopSc:{},loopDone:{},offs:[],wrong:0,win:winFor(Object.assign({},d,{bpm})),bar:-1,active:true,g:0,next:c.currentTime+.15,timer:0};$('winTxt').textContent=Math.round(run.win.tight);played.length=0;scrollToNotes(d.ev[0][1]);const lead=16;const sched=()=>{while(run&&run.next<c.currentTime+.12){const g=run.g,t=run.next;if(g<lead){if(g%4===0)click(t,g===0);const cd=4-Math.floor(g/4);setTimeout(()=>{if(run)$('oled').textContent='COUNT '+cd},Math.max(0,(t-c.currentTime)*1000))}else{const s=(g-lead)%L,loop=Math.floor((g-lead)/L);if(S.set.drums){if(s%4===0)kick(t);if(s%4===2)hat(t)}else if(s%4===0)click(t,s%16===0);const ev=evAt(s);if(ev)addInst(ev,perfAt(t)+outLat()+S.set.lat,loop);setTimeout(()=>{if(run&&run.src==='int')tickUI(s)},Math.max(0,(t-c.currentTime)*1000))}run.g++;run.next+=run.sp}};run.timer=setInterval(sched,25);sched();$('go').textContent='Stop';$('srcInfo').textContent='Loop: app, '+bpm+' BPM'};
-const stop=()=>{if(run&&run.timer)clearInterval(run.timer);run=null;$('go').textContent='Start loop';$('wait').textContent='Wait mode';$('oled').textContent='READY';showTarget(evAt(0),null);renderSteps(0)};
+const stop=()=>{strobeRate=0;$('strobeTxt').textContent='timing';if(run&&run.timer)clearInterval(run.timer);run=null;$('go').textContent='Start loop';$('wait').textContent='Wait mode';$('oled').textContent='READY';showTarget(evAt(0),null);renderSteps(0)};
 $('go').onclick=()=>{if(run&&run.src==='int'){stop();return}if(ext.on){$('oled').textContent='PRESS PLAY ON CIRCUIT';return}if(run)stop();startInt();timers.drill.start()};
 $('demo').onclick=()=>{const d=drill(),c=A(),bpm=+$('bpm').value||d.bpm,sp=60/bpm/4,t0=c.currentTime+.1;d.ev.forEach(e=>e[1].forEach(n=>vOn(n,.8,t0+e[0]*sp,Math.min(.5,sp*3))))};
 
@@ -557,16 +585,16 @@ const timers={drill:mkTimer('tmDrill',600),ear:mkTimer('tmEar',300),th:mkTimer('
 /* render */
 const streak=()=>{let n=0;const d=new Date();if(!S.log[today()])d.setDate(d.getDate()-1);for(;;){const k=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');if(S.log[k]){n++;d.setDate(d.getDate()-1)}else break}return n};
 const renderDays=()=>{$('days').innerHTML=D.map((d,i)=>{const p=S.p[i+1]||{};return`<button class="day" data-d="${i+1}" aria-current="${S.day===i+1}" aria-label="Day ${i+1}">${code(i+1)}<i class="a${p.a?' on':''}"></i><i class="b${p.b?' on':''}"></i></button>`}).join('');const a=Object.values(S.p).filter(p=>p.a).length,b=Object.values(S.p).filter(p=>p.b).length;$('stA').textContent=a+'/14';$('stB').textContent=b+'/14';$('stStreak').textContent=streak()};
-const renderA=()=>{const d=drill(),p=P(S.day),it=INTRO[S.day-1];$('intro').innerHTML=`<div><b>Today</b>${it[0]}</div><div><b>Why it matters</b>${it[1]}</div>`+(it[2]?`<div><b>Listen for</b>${it[2]}</div>`:'');$('dayTitle').innerHTML='<b>'+code(S.day)+'</b> &nbsp;Weeks 1-2, day '+S.day+' of 14';$('drCode').textContent=code(S.day);$('drName').textContent=d.t;$('drMeta').innerHTML=[['Key',KEY(S.day)],['Target',d.bpm+' BPM'],['Bars',d.bars],['Hand','Right'],['Type',d.ev[0][1].length>1?'Chords':'Single notes'],['Goal',GOAL[S.day-1]]].map(x=>'<span>'+x[0]+' <b>'+x[1]+'</b></span>').join('');$('drHow').textContent=d.how+' New shape? Start in Wait mode, then the loop.';$('bpm').value=ladOn()?ladBpm():d.bpm;ladShow();$('earHow').textContent=EAR[d.ear];$('earInfo').textContent=d.ear==='m'?'Mixed day: the note under each question explains what it tests.':EARINFO[d.ear];$('earSc').textContent=p.ear[0]+'/'+p.ear[1];const key=today()+':'+S.day;$('scBest').textContent=S.best[key]?S.best[key]+'%':'-';$('scLast').textContent='-';$('scOff').textContent='-';$('scWrong').textContent='0';$('scBar').style.width='0';$('doneAMsg').classList.toggle('hide',!p.a);$('doneA').textContent=p.a?'Part A done':'Mark Part A done';renderSteps(0);showTarget(d.ev[0],null);setTimeout(()=>scrollToNotes(d.ev[0][1]),50);ear=null;$('earAns').innerHTML='';$('earMsg').textContent='';timers.drill.reset();timers.ear.reset()};
+const renderA=()=>{const d=drill(),p=P(S.day),it=INTRO[S.day-1];$('intro').innerHTML=`<div><b>${IC.today}Today</b>${it[0]}</div><div><b>${IC.why}Why it matters</b>${it[1]}</div>`+(it[2]?`<div><b>${IC.listen}Listen for</b>${it[2]}</div>`:'');$('dayTitle').innerHTML='<b>'+code(S.day)+'</b> &nbsp;Weeks 1-2, day '+S.day+' of 14';$('drCode').textContent=code(S.day);$('drName').textContent=d.t;$('drMeta').innerHTML=[['Key',KEY(S.day),'note'],['Target',d.bpm+' BPM','bpm'],['Bars',d.bars+' bars','bars'],['Hand','Right hand','hand'],['Type',d.ev[0][1].length>1?'Chords':'Single notes',d.ev[0][1].length>1?'chord':'single'],['Goal','Goal '+GOAL[S.day-1],'goal']].map(x=>'<span title="'+x[0]+'">'+IC[x[2]]+'<b>'+x[1]+'</b></span>').join('');$('drHow').textContent=d.how+' New shape? Start in Wait mode, then the loop.';$('bpm').value=ladOn()?ladBpm():d.bpm;ladShow();$('earHow').textContent=EAR[d.ear];$('earInfo').textContent=d.ear==='m'?'Mixed day: the note under each question explains what it tests.':EARINFO[d.ear];$('earSc').textContent=p.ear[0]+'/'+p.ear[1];const key=today()+':'+S.day;$('scBest').textContent=S.best[key]?S.best[key]+'%':'-';$('scLast').textContent='-';$('scOff').textContent='-';$('scWrong').textContent='0';$('scBar').style.width='0';$('doneAMsg').classList.toggle('hide',!p.a);$('doneA').textContent=p.a?'Part A done':'Mark Part A done';renderSteps(0);showTarget(d.ev[0],null);setTimeout(()=>scrollToNotes(d.ev[0][1]),50);ear=null;$('earAns').innerHTML='';$('earMsg').textContent='';timers.drill.reset();timers.ear.reset()};
 const renderB=()=>{const th=THEORY[S.day-1],ft=FEAT[S.day-1],p=P(S.day);$('thTitle').textContent='Theory: '+th[0];$('thBody').innerHTML='<p class="bg"><b>Background.</b> '+BG[S.day-1]+'</p>'+th[1];$('thQuiz').innerHTML=th[2].map((q,qi)=>`<p style="margin-top:14px"><b>${q[0]}</b></p><div class="row" data-q="${qi}">${q[1].map((o,oi)=>`<button class="ans${p.quiz[qi]!==undefined?(oi===q[2]?' right':(oi===p.quiz[qi]?' wrong':'')):''}" data-o="${oi}">${o}</button>`).join('')}</div>`).join('');$('ftTitle').textContent='Feature: '+ft[0];$('ftSteps').innerHTML=ft[1].map((s,i)=>`<li><input type="checkbox" id="fs${i}" data-i="${i}"${p.steps[i]?' checked':''}><label for="fs${i}">${s}</label></li>`).join('');$('doneBMsg').classList.toggle('hide',!p.b);$('doneB').textContent=p.b?'Part B done':'Mark Part B done';timers.th.reset();timers.ft.reset()};
-const renderSet=()=>{$('lat').value=S.set.lat;$('optAuto').checked=DEV.auto!==false;$('optWake').checked=DEV.wake!==false;$('optLadder').checked=ladOn();$('optExact').checked=S.set.exact;$('optDrums').checked=S.set.drums;$('optMidiSnd').checked=S.set.midiSnd;$('optTapSnd').checked=S.set.tapSnd};
+const renderSet=()=>{$('nameIn').value=S.name||'';$('lat').value=S.set.lat;$('optAuto').checked=DEV.auto!==false;$('optWake').checked=DEV.wake!==false;$('optLadder').checked=ladOn();$('optExact').checked=S.set.exact;$('optDrums').checked=S.set.drums;$('optMidiSnd').checked=S.set.midiSnd;$('optTapSnd').checked=S.set.tapSnd};
 const renderAll=()=>{renderDays();renderA();renderB();renderSet();renderSnd()};
 $('thQuiz').onclick=e=>{const b=e.target.closest('.ans');if(!b)return;const qi=+b.parentNode.dataset.q,oi=+b.dataset.o,p=P(S.day);if(p.quiz[qi]!==undefined)return;p.quiz[qi]=oi;timers.th.start();save();renderB()};
 $('ftSteps').onchange=e=>{const i=+e.target.dataset.i,p=P(S.day);p.steps[i]=e.target.checked;timers.ft.start();save()};
 $('days').onclick=e=>{const b=e.target.closest('.day');if(!b)return;stop();S.day=+b.dataset.d;save();renderAll()};
-$('doneA').onclick=()=>{const p=P(S.day);p.a=true;S.log[today()]=true;save();renderDays();$('doneAMsg').classList.remove('hide');$('doneA').textContent='Part A done'};
+$('doneA').onclick=()=>{const p=P(S.day);p.a=true;if(!p.aDate)p.aDate=today();S.log[today()]=true;save();renderDays();$('doneAMsg').classList.remove('hide');$('doneA').textContent='Part A done'};
 $('doneB').onclick=()=>{const p=P(S.day);p.b=true;save();renderDays();$('doneBMsg').classList.remove('hide');$('doneB').textContent='Part B done'};
-const tabs=['A','B','N','S'];tabs.forEach(t=>$('tab'+t).onclick=()=>{tabs.forEach(u=>{$('tab'+u).setAttribute('aria-selected',u===t);$('p'+u).classList.toggle('hide',u!==t)});$('intro').classList.toggle('hide',t==='S'||t==='N');if(t!=='A')stop()});
+const tabs=['A','B','N','S','C'];tabs.forEach(t=>$('tab'+t).onclick=()=>{tabs.forEach(u=>{$('tab'+u).setAttribute('aria-selected',u===t);$('p'+u).classList.toggle('hide',u!==t)});$('intro').classList.toggle('hide',t==='S'||t==='N'||t==='C');if(t==='C')renderCat();if(t!=='A')stop()});
 $('bpm').onchange=()=>{const v=+$('bpm').value;if(v>=40&&v<=160&&ladOn()){S.lad=S.lad||{};S.lad[S.day]=v;save();ladShow()}};
 $('lat').onchange=()=>{S.set.lat=DEV.lat=+$('lat').value||0;saveDev();save()};
 [['optLadder','ladder'],['optExact','exact'],['optDrums','drums'],['optMidiSnd','midiSnd'],['optTapSnd','tapSnd']].forEach(([id,k])=>$(id).onchange=()=>{S.set[k]=$(id).checked;if(DEVK.includes(k)){DEV[k]=S.set[k];saveDev()}save();if(k==='ladder'){$('bpm').value=ladOn()?ladBpm():drill().bpm;ladShow()}});
@@ -608,6 +636,24 @@ $('sndTry').onclick=tryChord;
 $('optHold').onchange=()=>{DEV.hold=$('optHold').checked;saveDev()};
 $('sndReset').onclick=()=>{const id=curSnd();if(DEV.knobs)delete DEV.knobs[id];saveDev();renderSnd()};
 $('sndLine').onclick=()=>$('tabN').click();
+/* strobe timing meter */
+let strobeAng=0,strobeRate=0,strobeRaf=0;
+const strobeDraw=()=>{let h='';for(let i=0;i<24;i++){const a=i/24*Math.PI*2;h+=`<circle cx="${30+24*Math.cos(a)}" cy="${30+24*Math.sin(a)}" r="${i%2?1.6:2.6}" fill="${i%2?'#ffffff':'#e2ff1f'}"/>`}$('strobe').innerHTML=`<g id="stg">${h}</g><circle cx="30" cy="30" r="3" fill="#fff"/>`};strobeDraw();
+const rm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+const strobeTick=()=>{strobeAng=(strobeAng+strobeRate)%360;const g=document.getElementById('stg');if(g)g.setAttribute('transform',`rotate(${strobeAng} 30 30)`);strobeRaf=strobeRate&&!rm?requestAnimationFrame(strobeTick):0};
+const strobeUpd=o=>{const r=o.slice(-8),m=r.reduce((a,b)=>a+b,0)/r.length;strobeRate=Math.abs(m)<15?0:Math.max(-4,Math.min(4,m/12));$('strobeTxt').textContent=strobeRate===0?'locked':(m<0?'rushing':'dragging');if(strobeRate&&!strobeRaf)strobeRaf=requestAnimationFrame(strobeTick)};
+/* catalogue */
+const fmtD=d=>d?d.slice(8,10)+'.'+d.slice(5,7)+'.'+d.slice(2,4):'';
+const bestFor=d=>Object.keys(S.best).filter(k=>k.endsWith(':'+d)).reduce((m,k)=>Math.max(m,S.best[k]),0);
+const PAL=[['#3567c4','#e2ff1f','#ffffff'],['#e2ff1f','#0d0c10','#3567c4'],['#0d0c10','#e2ff1f','#ffffff'],['#f1f0f4','#0d0c10','#3567c4'],['#ff2d3c','#ffffff','#0d0c10']];
+const sleeve=day=>{const d=D[day-1],p=S.p[day]||{},c=code(day);if(!p.a)return`<svg viewBox="0 0 100 100"><rect width="100" height="100" fill="#fbfafc" stroke="#0d0c10" stroke-width=".6"/><circle cx="50" cy="50" r="22" fill="none" stroke="#0d0c10" stroke-width=".6"/><circle cx="50" cy="50" r="2" fill="#0d0c10"/><text x="6" y="11" font-family="Albert Sans,sans-serif" font-weight="800" font-size="7" fill="#0d0c10">${c}</text><text x="6" y="94" font-family="Albert Sans,sans-serif" font-size="5.5" fill="#5d5a66">White label</text></svg>`;
+ const [bg,fg,ac]=PAL[(day-1)%PAL.length],L=d.bars*16,sc=bestFor(day),bpm=(S.lad&&S.lad[day])||d.bpm;let r='';d.ev.forEach((e,i)=>{const nx=d.ev[i+1],w=Math.max(1.5,((nx?nx[0]:L)-e[0])/L*84-1);e[1].forEach(n=>{const y=78-(n-48)/36*62;r+=`<rect x="${8+e[0]/L*84}" y="${y}" width="${w}" height="3.2" fill="${fg}"/>`})});
+ return`<svg viewBox="0 0 100 100"><rect width="100" height="100" fill="${bg}"/>${r}<circle cx="78" cy="22" r="${6+sc*.12}" fill="none" stroke="${ac}" stroke-width="1.6"/><rect x="8" y="88" width="${bpm/160*84}" height="1.6" fill="${ac}"/><text x="6" y="11" font-family="Albert Sans,sans-serif" font-weight="800" font-size="7" fill="${fg}">${c}</text><text x="6" y="97" font-family="Albert Sans,sans-serif" font-size="4.5" fill="${fg}">Keys</text></svg>`};
+let catSel=0;
+const credits=day=>{const d=D[day-1],p=S.p[day]||{},c=code(day);if(!p.a)return`<b>${c}.</b> ${d.t}. White label. Finish Part A to press it.`;const sc=bestFor(day),bpm=(S.lad&&S.lad[day])||d.bpm;return`<b>${c}.</b> ${d.t}. ${KEY(day)}. ${p.aDate?'Recorded '+fmtD(p.aDate)+'. ':''}${bpm} BPM. ${sc?'Best loop '+sc+'%. ':''}Played by ${(S.name||'').replace(/[<>&]/g,'')||'you'}.`};
+const renderCat=()=>{const n=Object.values(S.p).filter(p=>p.a).length;$('catCount').textContent=n+' of 14 pressed';$('cat').innerHTML=D.map((d,i)=>`<button class="slv" data-d="${i+1}" aria-pressed="${catSel===i+1}" aria-label="${code(i+1)}">${sleeve(i+1)}<small>${code(i+1)}${(S.p[i+1]||{}).a?'':' · white label'}</small></button>`).join('');$('catInfo').innerHTML=catSel?credits(catSel):'Tap a sleeve for its credits.'};
+$('cat').onclick=e=>{const b=e.target.closest('.slv');if(!b)return;catSel=+b.dataset.d;renderCat()};
+$('nameIn').oninput=()=>{S.name=$('nameIn').value.trim();save()};
 const thmSet=t=>{document.documentElement.dataset.theme=t;$('thmTxt').textContent=t==='dark'?'Light':'Dark';try{localStorage.setItem('keys-theme',t)}catch(e){}};
 thmSet(document.documentElement.dataset.theme||'dark');
 $('thm').onclick=()=>thmSet(document.documentElement.dataset.theme==='dark'?'light':'dark');
